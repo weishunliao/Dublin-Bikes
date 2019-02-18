@@ -11,28 +11,29 @@
 {% endblock navbar %}
 
 {% block content %}
-
-    <div id="googleMap" style="width:50%;height:400px;"></div>
-    <div>
-        <ul>
-            {% for s in station_list %}
-                <li>{{ s.name }}--{{ s.address }}--{{ s.number }}--({{ s.latitude }}, {{ s.longitude }})</li>
-            {% endfor %}
-        </ul>
-    </div>
+    <div id="googleMap" style="width:70%;height:600px;"></div>
     <script type="text/javascript" src="static/Dublin_Bike_Station.json"></script>
     <script>
-
         function myMap() {
             var mapProp = {
                 center: new google.maps.LatLng(53.3471, -6.26059),
                 zoom: 13,
             };
+            var image = {
+                url: 'static/img/map.png',
+                // This marker is 20 pixels wide by 32 pixels high.
+                scaledSize: new google.maps.Size(20, 20),
+                // The origin for this image is (0, 0).
+                origin: new google.maps.Point(0, 0),
+                // The anchor for this image is the base of the flagpole at (0, 32).
+                {#anchor: new google.maps.Point(0, 32)#}
+            };
             var map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
-            var marker = new google.maps.Marker({position: mapProp.center, map: map});
+            {% for s in station_list %}
+                var pos = {lat: {{ s.latitude }}, lng: {{ s.longitude }}};
+                var marker = new google.maps.Marker({position: pos, map: map,icon:image});
+            {% endfor %}
         }
-
-
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHMQwOzFCfEDBkg02vTwia0miOocA8Od0&callback=myMap"></script>
