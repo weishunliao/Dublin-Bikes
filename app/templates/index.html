@@ -1,0 +1,23 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+{#    <img src="{{url_for('.static', filename='img/bikes-logo.png')}}" width="100" height="100" class="d-inline-block align-top" alt="">#}
+    Bike Station List
+  </a>
+</nav>
+{% endblock navbar %}
+
+{% block content %}
+     <div id="station_map"></div>
+    <div>
+    <ul>
+    {% for s in station_list %}
+        <li>{{ s.name }}--{{ s.address }}--{{ s.number }}--({{ s.latitude }}, {{ s.longitude }})</li>
+    {% endfor %}
+    </ul>
+    </div>
+{% endblock %}
+
