@@ -31,8 +31,19 @@
             var map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
             {% for s in station_list %}
                 var pos = {lat: {{ s.latitude }}, lng: {{ s.longitude }}};
-                var marker = new google.maps.Marker({position: pos, map: map,icon:image});
+                var marker = new google.maps.Marker({position: pos, map: map, icon: image});
+                show_info(marker);
             {% endfor %}
+
+        }
+
+        function show_info(marker) {
+            var infowindow = new google.maps.InfoWindow({
+                content: "Here is a bike station."
+            });
+            marker.addListener('click', function () {
+                infowindow.open(marker.get('map'), marker);
+            });
         }
     </script>
     <script async defer
