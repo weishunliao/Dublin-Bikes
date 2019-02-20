@@ -25,7 +25,7 @@
             };
             let map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
             {% for s in station_list %}
-                var pos = {lat: {{ s.latitude }}, lng: {{ s.longitude }}};
+                var pos = {lat: {{ s.p_latitude }}, lng: {{ s.p_longitude }}};
                 var marker = new google.maps.Marker({position: pos, map: map, icon: image});
                 var content = "NAME: {{ s.name }}";
                 content += "NUMBER: {{ s.number }}";

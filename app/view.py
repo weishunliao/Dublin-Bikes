@@ -1,9 +1,9 @@
 from app import app
-from app.models import Station
+from app.models import Stations
 from flask import render_template
 
 
 @app.route('/')
 def hello_world():
-    stations = Station.query.all()
-    return render_template('index.html', station_list=stations, map_key=app.config["SECRET_MAP_KEY"])
+    Stations_info = Stations.query.all()
+    return render_template('index.html', station_list=Stations_info, map_key=app.config["SECRET_MAP_KEY"])

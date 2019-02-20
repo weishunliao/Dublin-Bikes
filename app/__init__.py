@@ -3,12 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__,instance_relative_config=True)
-Bootstrap(app)
-app.config.from_object('config')
-app.config.from_pyfile('config.py')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/flaskDb'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object('config.default')
+app.config.from_pyfile('config.py')
+Bootstrap(app)
 db = SQLAlchemy(app)
 
 
