@@ -4,6 +4,6 @@ from flask import render_template
 
 
 @app.route('/')
-def hello_world():
+def index():
     Stations_info = Stations.query.all()
     return render_template('index.html', station_list=Stations_info, map_key=app.config["SECRET_MAP_KEY"])
