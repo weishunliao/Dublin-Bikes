@@ -5,13 +5,14 @@
     <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand" href="#">
             Dublin Bike Station
-{#                <img src="{{url_for('.static', filename='')}}" width="100" height="100" class="d-inline-block align-top" alt="">#}
+            {#                <img src="{{url_for('.static', filename='')}}" width="100" height="100" class="d-inline-block align-top" alt="">#}
         </a>
     </nav>
 {% endblock navbar %}
 
 {% block content %}
-    <div id="googleMap" style="width:70%;height:600px;"></div>
+    <div id="bike_map" style="width:70%;height:600px;"></div>
+    <div id="weather_box">{{ weather_json["weather"][0]["main"] }}-{{ weather_json["main"]["temp"] }}</div>
     <script>
         function myMap() {
             let mapProp = {
@@ -23,22 +24,50 @@
                 scaledSize: new google.maps.Size(20, 20),
                 origin: new google.maps.Point(0, 0),
             };
-            let map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
+            let map = new google.maps.Map(document.getElementById('bike_map'), mapProp);
             {% for s in station_list %}
                 var pos = {lat: {{ s.p_latitude }}, lng: {{ s.p_longitude }}};
-                var marker = new google.maps.Marker({position: pos, map: map, icon: image});
-                var content = "NAME: {{ s.name }}";
-                content += "NUMBER: {{ s.number }}";
-                show_info(marker, content);
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    icon: image,
+                    {#cursor: "{{ s.ID }}",#}
+                    title: "{{ s.ID }}"
+                });
+                show_info(marker);
             {% endfor %}
 
         }
-        function show_info(marker,content) {
+
+        function show_info(marker) {
             var infowindow = new google.maps.InfoWindow({
-                content: content
+                content: "",
+                maxWidth: 500
             });
-            marker.addListener('click', function () {
-                infowindow.open(marker.get('map'), marker);
+            marker.addListener("click", function () {
+                var station_id = marker.get("title");
+                var content = "<div>";
+                var response_json;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        response_json = JSON.parse(this.responseText);
+                        for (let i = 0; i < response_json.length; i++) {
+                            if (response_json[i].number == station_id) {
+                                content += "<h4>Station: " + response_json[i].name + "</h4>";
+                                content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
+                                content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
+                                content += "</div>";
+                                infowindow.setContent(content);
+                                break;
+                            }
+
+                        }
+                    }
+                };
+                xhttp.open("GET", "https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey={{ bike_api_key }}", true);
+                xhttp.send();
+                infowindow.open(marker.get("map"), marker);
             });
         }
     </script>
