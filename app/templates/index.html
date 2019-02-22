@@ -19,11 +19,6 @@
                 center: new google.maps.LatLng(53.3471, -6.26059),
                 zoom: 13,
             };
-            let image = {
-                url: 'static/img/map.png',
-                scaledSize: new google.maps.Size(20, 20),
-                origin: new google.maps.Point(0, 0),
-            };
 
             var map = new google.maps.Map(document.getElementById('bike_map'), mapProp);
 
@@ -33,18 +28,31 @@
 
                     response_json = JSON.parse(this.responseText);
                     for (let i = 0; i < response_json.length; i++) {
+                        let image = {};
+                        image.origin = new google.maps.Point(0, 0);
+                        image.scaledSize = new google.maps.Size(30, 30);
+                        if (response_json[i].available_bikes > 5 && response_json[i].status == "OPEN") {
+                            image.url = 'static/img/green.png';
+                        } else if (response_json[i].available_bikes > 0 && response_json[i].status == "OPEN") {
+                            image.url = 'static/img/orange.png';
+                        } else if (response_json[i].available_bikes == 0 && response_json[i].status == "OPEN") {
+                            image.url = 'static/img/red.png';
+                        } else {
+                            image.url = 'static/img/grey.png';
+                        }
+
                         let content = "<div>";
                         var marker = new google.maps.Marker({
-                        position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
-                        map: map,
-                        icon: image,
-                        title: String(response_json[i].number)
+                            position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
+                            map: map,
+                            icon: image,
+                            title: String(response_json[i].number)
                         });
                         content += "<h4>Station: " + response_json[i].name + "</h4>";
                         content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
                         content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
                         content += "</div>";
-                        show_info(marker,content);
+                        show_info(marker, content);
                     }
                 }
             };
@@ -52,7 +60,7 @@
             xhttp.send();
         }
 
-        function show_info(marker,content) {
+        function show_info(marker, content) {
             var infowindow = new google.maps.InfoWindow({
                 content: content,
                 maxWidth: 500
