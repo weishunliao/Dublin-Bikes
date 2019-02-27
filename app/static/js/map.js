@@ -305,16 +305,15 @@
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-
                     response_json = JSON.parse(this.responseText);
                     for (let i = 0; i < response_json.length; i++) {
                         let image = {};
                         image.origin = new google.maps.Point(0, 0);
                         image.scaledSize = new google.maps.Size(30, 30);
                         if (response_json[i].available_bikes > 5 && response_json[i].status == "OPEN") {
-                            image.url = 'static/img/green_4.png';
+                            image.url = 'static/img/green.png';
                         } else if (response_json[i].available_bikes > 0 && response_json[i].status == "OPEN") {
-                            image.url = 'static/img/orange_3.png';
+                            image.url = 'static/img/orange.png';
                         } else if (response_json[i].available_bikes == 0 && response_json[i].status == "OPEN") {
                             image.url = 'static/img/red.png';
                         } else {
