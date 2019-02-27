@@ -46,7 +46,7 @@ class Weather(db.Model):
     temp = db.Column(db.FLOAT())
     weather = db.Column(db.VARCHAR(255))
     w_description = db.Column(db.VARCHAR(255))
-    visibility = db.Column(db.Integer(255))
+    visibility = db.Column(db.Integer())
     wind_speed = db.Column(db.Integer())
     datetime = db.Column(db.BigInteger())
     day = db.Column(db.TIMESTAMP())
