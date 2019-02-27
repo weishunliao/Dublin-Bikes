@@ -2,6 +2,8 @@
 {% block title %}Home{% endblock %}
 {% block script %}
     <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type="text/javascript" id="map_script" src="{{ url_for('static', filename='js/map.js') }}"
+            data="{{ bike_api_key }}"></script>
 {% endblock script %}
 {% block navbar %}
     <nav class="navbar navbar-light bg-light">
@@ -16,9 +18,13 @@
     <div class="input-group mb-3" style="width: 30%">
         <input id="search_box" type="text" class="form-control" placeholder="Station name, Street name..."
                aria-label="Recipient's username"
-               aria-describedby="button-addon2">
+               aria-describedby="button-addon2"
+               value=""
+        >
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick=open_info_window()>
+                Search
+            </button>
         </div>
     </div>
     <div id="hint"></div>
@@ -39,16 +45,38 @@
                 $.get("/search", {'input': input}, function (data) {
                     let hint_msg = "<ul>";
                     Object.keys(data).forEach(function (key) {
-                        hint_msg+="<li>"+data[key]+"</li>"
+                        hint_msg += "<li>" + data[key] + "</li>"
                     });
-                    hint_msg+="</ul>";
+                    hint_msg += "</ul>";
                     $("#hint").html(hint_msg);
                 });
             }, 0);
         });
+
+        function open_info_window() {
+            let marker = markers[0].obj;
+            let content = markers[0].content;
+            let station_name = document.getElementById('search_box').value;
+            for (let i = 0; i < markers.length; i++) {
+                if (markers[i].title == station_name) {
+                    marker = markers[i].obj;
+                    content = markers[i].content;
+                    break;
+                }
+            }
+            var infowindow = new google.maps.InfoWindow({
+                content: content,
+                maxWidth: 500
+            });
+            if (active_marker_obj != null) {
+                active_marker_obj.close();
+            }
+            active_marker_obj = infowindow;
+            infowindow.open(marker.get("map"), marker);
+        }
     </script>
-    <script type="text/javascript" id="map_script" src="{{ url_for('static', filename='js/map.js') }}"
-            data="{{ bike_api_key }}"></script>
+    <script type="text/javascript" id="auto_complete_script"
+            src="{{ url_for('static', filename='js/auto_complete.js') }}"></script>
     <script async defer
             src= {{ map_key }}>
     </script>
