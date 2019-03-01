@@ -1,0 +1,162 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Home{% endblock %}
+{% block script %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}"/>
+    <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type="text/javascript" id="map_script" src="{{ url_for('static', filename='js/map.js') }}"
+            data="{{ bike_api_key }}"></script>
+{% endblock script %}
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock navbar %}
+
+{% block content %}
+    <header class="bg-primary text-white">
+        <div class="container text-center">
+            <h1>Welcome to Dublin City Bike!</h1>
+            <p class="lead">A landing page template freshly redesigned for Bootstrap 4</p>
+        </div>
+    </header>
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2>About this page</h2>
+                    <p class="lead">This is a great place to talk about your webpage. This template is purposefully
+                        unstyled so you can use it as a boilerplate or starting point for you own landing page designs!
+                        This template features:</p>
+                    <ul>
+                        <li>Clickable nav links that smooth scroll to page sections</li>
+                        <li>Responsive behavior when clicking nav links perfect for a one page website</li>
+                        <li>Bootstrap's scrollspy feature which highlights which section of the page you're on in the
+                            navbar
+                        </li>
+                        <li>Minimal custom CSS so you are free to explore your own unique design options</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="input-group mb-3" style="width: 30%">
+        <input id="search_box" type="text" class="form-control" placeholder="Station name, Street name..."
+               aria-label="Recipient's username"
+               aria-describedby="button-addon2"
+               value=""
+        >
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick=open_info_window()>
+                Search
+            </button>
+        </div>
+    </div>
+    <div id="hint"></div>
+    <div id="bike_map" style="width:70%;height:600px;"></div>
+    {#    <div id="weather_box">{{ weather_json["weather"][0]["main"] }}-{{ weather_json["main"]["temp"] }}</div>#}
+    <h3 id="test"></h3>
+    {#            <div class="col-md-4 offset-md-4">#}
+    <div class="">
+        <div class="weather">
+            <div class="current">
+                <div class="info">
+                    <div>&nbsp;</div>
+                    <div class="city">
+                        <small>
+                            <small>CITY:</small>
+                        </small>
+                        Dublin
+                    </div>
+                    <div class="type">{{ weather_json["weather"][0]["main"] }};
+                    </div>
+                    <div class="temp">{{ weather_json["main"]["temp"] }}&deg;
+                        <small>C</small>
+                    </div>
+                    <div class="wind">
+                        <small>
+                            <small>WIND SPEED:</small>
+                        </small>
+                        {{ weather_json["wind"]["speed"] }}
+                    </div>
+                    {#                            <div>&nbsp;</div>#}
+                </div>
+                <div class="icon">
+                    <img src="{{ url_for('static', filename='img/weather/045-rain-2.png') }}" width="50px">
+                    {#                            <span class="wi-day-sunny"></span>#}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+        $('#search_box').keyup(function () {
+            delay(function () {
+                var input = $("#search_box").val();
+                $.get("/search", {'input': input}, function (data) {
+                    let hint_msg = "<ul>";
+                    Object.keys(data).forEach(function (key) {
+                        hint_msg += "<li>" + data[key] + "</li>"
+                    });
+                    hint_msg += "</ul>";
+                    $("#hint").html(hint_msg);
+                });
+            }, 0);
+        });
+
+        function open_info_window() {
+            let marker = markers[0].obj;
+            let content = markers[0].content;
+            let station_name = document.getElementById('search_box').value;
+            for (let i = 0; i < markers.length; i++) {
+                if (markers[i].title == station_name) {
+                    marker = markers[i].obj;
+                    content = markers[i].content;
+                    break;
+                }
+            }
+            var infowindow = new google.maps.InfoWindow({
+                content: content,
+                maxWidth: 500
+            });
+            if (active_marker_obj != null) {
+                active_marker_obj.close();
+            }
+            active_marker_obj = infowindow;
+            infowindow.open(marker.get("map"), marker);
+        }
+    </script>
+    <script type="text/javascript" id="auto_complete_script"
+            src="{{ url_for('static', filename='js/auto_complete.js') }}"></script>
+    <script async defer
+            src= {{ map_key }}>
+    </script>
+
+{% endblock %}
+

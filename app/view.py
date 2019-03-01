@@ -22,3 +22,11 @@ def search():
         for i in statioin_obj_arr:
             result[i.ID] = i.name
     return jsonify(result)
+
+
+# @app.route('/')
+def new():
+    respose = requests.get(app.config["SECRET_WEATHER_KEY"])
+    weather_json = respose.json()
+    respose.close()
+    return render_template('new_index.html', weather_json=weather_json)

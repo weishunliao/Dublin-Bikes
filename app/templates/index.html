@@ -1,57 +1,54 @@
-{% extends "bootstrap/base.html" %}
-{% block title %}Home{% endblock %}
-{% block script %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" id="map_script" src="{{ url_for('static', filename='js/map.js') }}"
             data="{{ bike_api_key }}"></script>
-{% endblock script %}
-{% block navbar %}
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            Dublin Bike Station
-            {#                <img src="{{url_for('.static', filename='')}}" width="100" height="100" class="d-inline-block align-top" alt="">#}
-        </a>
-    </nav>
-{% endblock navbar %}
-
-{% block content %}
-    <div class="input-group mb-3" style="width: 30%">
-        <input id="search_box" type="text" class="form-control" placeholder="Station name, Street name..."
-               aria-label="Recipient's username"
-               aria-describedby="button-addon2"
-               value=""
-        >
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick=open_info_window()>
-                Search
-            </button>
-        </div>
+</head>
+<body>
+<div class="input-group mb-3" style="width: 30%">
+    <input id="search_box" type="text" class="form-control" placeholder="Station name, Street name..."
+           aria-describedby="button-addon2"
+           value=""
+    >
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick=open_info_window()>
+            Search
+        </button>
     </div>
-    <div id="hint"></div>
-    <div id="bike_map" style="width:70%;height:600px;"></div>
-    <div id="weather_box">{{ weather_json["weather"][0]["main"] }}-{{ weather_json["main"]["temp"] }}</div>
-    <h3 id="test"></h3>
-    <script>
-        var delay = (function () {
-            var timer = 0;
-            return function (callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-        })();
-        $('#search_box').keyup(function () {
-            delay(function () {
-                var input = $("#search_box").val();
-                $.get("/search", {'input': input}, function (data) {
-                    let hint_msg = "<ul>";
-                    Object.keys(data).forEach(function (key) {
-                        hint_msg += "<li>" + data[key] + "</li>"
-                    });
-                    hint_msg += "</ul>";
-                    $("#hint").html(hint_msg);
+</div>
+<div id="hint"></div>
+<div id="bike_map" style="width:70%;height:600px;"></div>
+{#    <div id="weather_box">{{ weather_json["weather"][0]["main"] }}-{{ weather_json["main"]["temp"] }}</div>#}
+<h3 id="test"></h3>
+{#            <div class="col-md-4 offset-md-4">#}
+
+</div>
+<script>
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+    $('#search_box').keyup(function () {
+        delay(function () {
+            var input = $("#search_box").val();
+            $.get("/search", {'input': input}, function (data) {
+                let hint_msg = "<ul>";
+                Object.keys(data).forEach(function (key) {
+                    hint_msg += "<li>" + data[key] + "</li>"
                 });
-            }, 0);
-        });
+                hint_msg += "</ul>";
+                $("#hint").html(hint_msg);
+            });
+        }, 0);
+    });
 
         function open_info_window() {
             let marker = markers[0].obj;
@@ -81,5 +78,5 @@
             src= {{ map_key }}>
     </script>
 
-{% endblock %}
+</body>
 
