@@ -122,33 +122,27 @@
 
     {# -----------draw chart----------- #}
     time_slider_obj = $("#time_slider").bootstrapSlider();
+
     function time_slider_change() {
         var time = $("#time_slider").bootstrapSlider('getValue');
         $('#test').text(time);
     }
+
     time_slider_obj.on('change', time_slider_change);
 
+    var last_7_data_json ={{ last_7_data | safe }};
 
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
-
     function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Year', 'Sales'],
-            ['2004', 1000],
-            ['2005', 1170],
-            ['2006', 660],
-            ['2007', 1030]
-        ]);
+        {#var data = new google.visualization.DataTable(last_7_data_json);#}
 
+        var data = new google.visualization.DataTable(last_7_data_json);
         var options = {
-            title: 'Bike Usage',
-            curveType: 'function',
+            title: 'Bike Historical Usage Data',
             legend: {position: 'top'}
         };
-
-        var chart = new google.visualization.LineChart(document.getElementById('bike_chart'));
-
+        var chart = new google.visualization.ColumnChart(document.getElementById('bike_chart'));
         chart.draw(data, options);
     }
 </script>
