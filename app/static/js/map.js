@@ -1,10 +1,6 @@
 var markers = [];
 
 function myMap() {
-    let mapProp = {
-        center: new google.maps.LatLng(53.3471, -6.26059),
-        zoom: 13,
-    };
     var styledMapType = new google.maps.StyledMapType(
         [
             {
@@ -301,6 +297,30 @@ function myMap() {
         ]
         , {name: 'Styled Map'}
     );
+    var mapProp = {
+        center: new google.maps.LatLng(53.3471, -6.26059),
+        zoom: 11,
+        mapTypeControl: false,
+        fullscreenControl: false,
+        streetViewControl: false
+    };
+    var my_location;
+    navigator.geolocation.getCurrentPosition(function (position) {
+        let geo = {};
+        geo.lat = position.coords.latitude;
+        geo.lng = position.coords.longitude;
+        var img = {
+            url: 'static/img/pin.png',
+            origin: new google.maps.Point(0, 0),
+            scaledSize: new google.maps.Size(35, 35)
+        };
+        my_location = new google.maps.Marker({
+            position: geo,
+            map: map,
+            title: "geolocation",
+            icon: img,
+        });
+    });
     var map = new google.maps.Map(document.getElementById('bike_map'), mapProp);
     map.mapTypes.set('styled_map', styledMapType);
     map.setMapTypeId('styled_map');
@@ -345,7 +365,6 @@ function myMap() {
     var bike_api_key = document.getElementById('map_script').getAttribute('data');
     xhttp.open("GET", "https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=" + bike_api_key, true);
     xhttp.send();
-    console.log(markers);
 }
 
 var active_marker_obj;

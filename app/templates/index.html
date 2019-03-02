@@ -6,77 +6,159 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" id="map_script" src="{{ url_for('static', filename='js/map.js') }}"
-            data="{{ bike_api_key }}"></script>
+    <script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css"/>
+    <style>
+        .autocomplete {
+            /*the container must be positioned relative:*/
+            position: relative;
+            display: inline-block;
+        }
+
+        input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input[type=text] {
+            background-color: #f1f1f1;
+            width: 100%;
+        }
+
+        input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+        }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9;
+        }
+
+        .autocomplete-active {
+            /*when navigating through the items using the arrow keys:*/
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
 <div class="input-group mb-3" style="width: 30%">
-    <input id="search_box" type="text" class="form-control" placeholder="Station name, Street name..."
-           aria-describedby="button-addon2"
-           value=""
-    >
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick=open_info_window()>
-            Search
-        </button>
+    <div class="autocomplete" style="width:300px;">
+        <input id="search_box" type="text" name="myCountry" placeholder="Station name, Street name..."
+               class="form-control">
     </div>
+    <button type="button" class="btn btn-dark" onclick=open_info_window()>Search</button>
 </div>
 <div id="hint"></div>
-<div id="bike_map" style="width:70%;height:600px;"></div>
+<div id="bike_map" style="width:80%;height:600px;"></div>
 {#    <div id="weather_box">{{ weather_json["weather"][0]["main"] }}-{{ weather_json["main"]["temp"] }}</div>#}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <h3 id="test"></h3>
-{#            <div class="col-md-4 offset-md-4">#}
+<input id="time_slider" data-slider-min="0" data-slider-max="23" data-slider-step="1"
+       data-slider-value="12"/>
+<div id="bike_chart"></div>
 
 </div>
 <script>
-    var delay = (function () {
-        var timer = 0;
-        return function (callback, ms) {
-            clearTimeout(timer);
-            timer = setTimeout(callback, ms);
-        };
-    })();
-    $('#search_box').keyup(function () {
-        delay(function () {
-            var input = $("#search_box").val();
-            $.get("/search", {'input': input}, function (data) {
-                let hint_msg = "<ul>";
-                Object.keys(data).forEach(function (key) {
-                    hint_msg += "<li>" + data[key] + "</li>"
-                });
-                hint_msg += "</ul>";
-                $("#hint").html(hint_msg);
-            });
-        }, 0);
-    });
-
-        function open_info_window() {
-            let marker = markers[0].obj;
-            let content = markers[0].content;
-            let station_name = document.getElementById('search_box').value;
-            for (let i = 0; i < markers.length; i++) {
-                if (markers[i].title == station_name) {
-                    marker = markers[i].obj;
-                    content = markers[i].content;
-                    break;
-                }
+    function open_info_window() {
+        let marker = markers[0].obj;
+        let content = markers[0].content;
+        let station_name = document.getElementById('search_box').value;
+        for (let i = 0; i < markers.length; i++) {
+            if (markers[i].title == station_name) {
+                marker = markers[i].obj;
+                content = markers[i].content;
+                break;
             }
-            var infowindow = new google.maps.InfoWindow({
-                content: content,
-                maxWidth: 500
-            });
-            if (active_marker_obj != null) {
-                active_marker_obj.close();
-            }
-            active_marker_obj = infowindow;
-            infowindow.open(marker.get("map"), marker);
         }
-    </script>
-    <script type="text/javascript" id="auto_complete_script"
-            src="{{ url_for('static', filename='js/auto_complete.js') }}"></script>
-    <script async defer
-            src= {{ map_key }}>
-    </script>
+        var infowindow = new google.maps.InfoWindow({
+            content: content,
+            maxWidth: 500
+        });
+        if (active_marker_obj != null) {
+            active_marker_obj.close();
+        }
+        active_marker_obj = infowindow;
+        infowindow.open(marker.get("map"), marker);
+    }
+
+    {#
+    var station_list = [];
+    var station_list_json ={{ station_list | safe }};
+    for (let stationListElement of station_list_json) {
+        station_list.push(stationListElement);
+    }
+    #}
+
+    {# -----------draw chart----------- #}
+    time_slider_obj = $("#time_slider").bootstrapSlider();
+    function time_slider_change() {
+        var time = $("#time_slider").bootstrapSlider('getValue');
+        $('#test').text(time);
+    }
+    time_slider_obj.on('change', time_slider_change);
+
+
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Year', 'Sales'],
+            ['2004', 1000],
+            ['2005', 1170],
+            ['2006', 660],
+            ['2007', 1030]
+        ]);
+
+        var options = {
+            title: 'Bike Usage',
+            curveType: 'function',
+            legend: {position: 'top'}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('bike_chart'));
+
+        chart.draw(data, options);
+    }
+</script>
+{#<script type="text/javascript" id="auto_complete_script"#}
+{#        src="{{ url_for('static', filename='js/auto_complete.js') }}"></script>#}
+<script async defer
+        src= {{ map_key }}>
+</script>
+<script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"
+        data=station_list></script>
 
 </body>
 
