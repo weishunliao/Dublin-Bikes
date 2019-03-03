@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js"></script>
     <link rel="stylesheet"
@@ -78,18 +77,19 @@
 <div id="bike_map" style="width:80%;height:600px;"></div>
 {#    <div id="weather_box">{{ weather_json["weather"][0]["main"] }}-{{ weather_json["main"]["temp"] }}</div>#}
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h3 id="test"></h3>
-<input id="time_slider" data-slider-min="0" data-slider-max="23" data-slider-step="1"
-       data-slider-value="12"/>
+<button type="button" class="btn btn-primary" onclick="back_to_now()">Now</button>
+<span id="ex6CurrentSliderValLabel">Time: <span id="SliderVal">Now</span></span><br>
+<div style="width: 85%;margin: 0 auto">
+    <input style="width: 100%" id="time_slider" type="Number" data-slider-min="0" data-slider-max="23"
+           data-slider-step="1"
+           data-slider-value={{ current3 }} data-slider-tooltip="always" data-slider-tooltip_position="top"/>
+</div>
 <div id="bike_chart"></div>
 
 </div>
 <script>
+    var time_galobal = "current";
+
     function open_info_window() {
         let marker = markers[0].obj;
         let content = markers[0].content;
@@ -121,19 +121,34 @@
     #}
 
     {# -----------draw chart----------- #}
-    time_slider_obj = $("#time_slider").bootstrapSlider();
+    var historical_data;
+    $.get("/update_map?t=all", function (response) {
+        historical_data = response;
+    });
 
-    function time_slider_change() {
-        var time = $("#time_slider").bootstrapSlider('getValue');
-        $('#test').text(time);
+    time_slider_obj = $("#time_slider").bootstrapSlider();
+    time_slider_obj.on('change', function () {
+        let val = $("#time_slider").bootstrapSlider('getValue');
+        $("#SliderVal").text(val + ":00");
+        clear_markers();
+        draw_marker(historical_data[parseInt(val)])
+
+    });
+
+    function back_to_now() {
+        $("#time_slider").bootstrapSlider('setValue', {{ current3 }});
+        $("#SliderVal").text("Now");
+        time_galobal = "current";
+        $.get("/update_map?t=current", function (response) {
+            clear_markers();
+            draw_marker(response);
+        });
     }
 
-    time_slider_obj.on('change', time_slider_change);
-
     var last_7_data_json ={{ last_7_data | safe }};
-
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
+
     function drawChart() {
         {#var data = new google.visualization.DataTable(last_7_data_json);#}
 
@@ -146,11 +161,12 @@
         chart.draw(data, options);
     }
 </script>
-{#<script type="text/javascript" id="auto_complete_script"#}
-{#        src="{{ url_for('static', filename='js/auto_complete.js') }}"></script>#}
 <script async defer
         src= {{ map_key }}>
 </script>
+<script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"
+        current=""></script>
+
 <script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"
         data=station_list></script>
 

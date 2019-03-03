@@ -1,4 +1,6 @@
 var markers = [];
+var map;
+var active_marker_obj;
 
 function myMap() {
     var styledMapType = new google.maps.StyledMapType(
@@ -299,7 +301,7 @@ function myMap() {
     );
     var mapProp = {
         center: new google.maps.LatLng(53.3471, -6.26059),
-        zoom: 11,
+        zoom: 13,
         mapTypeControl: false,
         fullscreenControl: false,
         streetViewControl: false
@@ -309,10 +311,12 @@ function myMap() {
         let geo = {};
         geo.lat = position.coords.latitude;
         geo.lng = position.coords.longitude;
-        var img = {
-            url: 'static/img/pin.png',
+        // geo.lat=53.3375;
+        // geo.lng = -6.25294;
+        let img = {
+            url: 'static/img/pin.svg',
             origin: new google.maps.Point(0, 0),
-            scaledSize: new google.maps.Size(35, 35)
+            scaledSize: new google.maps.Size(50, 50)
         };
         my_location = new google.maps.Marker({
             position: geo,
@@ -321,53 +325,61 @@ function myMap() {
             icon: img,
         });
     });
-    var map = new google.maps.Map(document.getElementById('bike_map'), mapProp);
+    map = new google.maps.Map(document.getElementById('bike_map'), mapProp);
     map.mapTypes.set('styled_map', styledMapType);
     map.setMapTypeId('styled_map');
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             response_json = JSON.parse(this.responseText);
-            for (let i = 0; i < response_json.length; i++) {
-                let image = {};
-                image.origin = new google.maps.Point(0, 0);
-                image.scaledSize = new google.maps.Size(30, 30);
-                if (response_json[i].available_bikes > 5 && response_json[i].status == "OPEN") {
-                    image.url = 'static/img/green.png';
-                } else if (response_json[i].available_bikes > 0 && response_json[i].status == "OPEN") {
-                    image.url = 'static/img/orange.png';
-                } else if (response_json[i].available_bikes == 0 && response_json[i].status == "OPEN") {
-                    image.url = 'static/img/red.png';
-                } else {
-                    image.url = 'static/img/grey.png';
-                }
-
-                let content = "<div>";
-                var marker = new google.maps.Marker({
-                    position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
-                    map: map,
-                    icon: image,
-                    title: String(response_json[i].name)
-                });
-                content += "<h4>Station: " + response_json[i].name + "</h4>";
-                content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
-                content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
-                content += "</div>";
-                let mker = {};
-                mker.title = marker.title;
-                mker.obj = marker;
-                mker.content = content;
-                markers.push(mker);
-                show_info(marker, content);
-            }
+            draw_marker(response_json)
         }
     };
-    var bike_api_key = document.getElementById('map_script').getAttribute('data');
-    xhttp.open("GET", "https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=" + bike_api_key, true);
+    xhttp.open("GET", "/update_map?t=current", true);
     xhttp.send();
 }
 
-var active_marker_obj;
+function draw_marker(response_json) {
+    markers = [];
+    for (let i = 0; i < response_json.length; i++) {
+        let image = {};
+        image.origin = new google.maps.Point(0, 0);
+        image.scaledSize = new google.maps.Size(30, 30);
+        if (response_json[i].available_bikes > 10 && response_json[i].status == "OPEN") {
+            image.url = 'static/img/green.png';
+        } else if (response_json[i].available_bikes > 0 && response_json[i].status == "OPEN") {
+            image.url = 'static/img/orange.png';
+        } else if (response_json[i].available_bikes == 0 && response_json[i].status == "OPEN") {
+            image.url = 'static/img/red.png';
+        } else {
+            image.url = 'static/img/grey.png';
+        }
+
+        let content = "<div>";
+        var marker = new google.maps.Marker({
+            position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
+            map: map,
+            icon: image,
+            title: String(response_json[i].name)
+        });
+        content += "<h4>Station: " + response_json[i].name + "</h4>";
+        content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
+        content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
+        content += "</div>";
+        let mker = {};
+        mker.title = marker.title;
+        mker.obj = marker;
+        mker.content = content;
+        markers.push(mker);
+        show_info(marker, content);
+    }
+}
+
+function clear_markers() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].obj.setMap(null);
+    }
+}
 
 function show_info(marker, content) {
     var infowindow = new google.maps.InfoWindow({
