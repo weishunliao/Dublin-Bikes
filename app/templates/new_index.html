@@ -4,134 +4,20 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i"
           rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slider.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/weather.css') }}"/>
 
     <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <title>Title</title>
     <style>
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -999;
-            min-width: 100%;
-            min-height: 100%;
-            background-color: rgba(15, 15, 15, 1);
-
-        }
-
-        .mbr-white {
-            color: #ffffff;
-        }
-
-        .mbr-section-title {
-            text-align: center;
-        }
-
-        .display-1 {
-            font-family: 'Rubik', sans-serif;
-            font-size: 4.25rem;
-        }
-
-        .align-center {
-            text-align: center;
-        }
-
-        .display-5 {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.5rem;
-        }
-
-        .mbr-section-btn a.btn:not(.btn-form) {
-            border-radius: 100px;
-        }
-
-        .mbr-section-btn a.btn:not(.btn-form):hover,
-        .mbr-section-btn a.btn:not(.btn-form):focus {
-            box-shadow: none !important;
-        }
-
-        .mbr-section-btn a.btn:not(.btn-form):hover,
-        .mbr-section-btn a.btn:not(.btn-form):focus {
-            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.2) !important;
-            -webkit-box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.2) !important;
-        }
-
-        .btn-white-outline,
-        .btn-white-outline:active,
-        .btn-white-outline.active {
-            background: none;
-            border-color: #ffffff;
-            color: #ffffff;
-        }
-
-        .btn-white-outline:hover,
-        .btn-white-outline:focus {
-            color: #333333;
-            background-color: #ffffff;
-            border-color: #ffffff;
-        }
-
-        .display-4 {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
-        }
-
-        .display-4 > .mbr-iconfont {
-            font-size: 1.6rem;
-        }
-
-        .display-5 {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.5rem;
-        }
-
-        .display-5 > .mbr-iconfont {
-            font-size: 2.4rem;
-        }
-
-        .display-7 {
-            font-family: 'Rubik', sans-serif;
-            font-size: 2rem;
-        }
-
-        .mbr-text {
-            font-style: normal;
-            line-height: 1.6;
-        }
-
-        .mbr-bold {
-            font-weight: 700;
-        }
-
-        .btn-md {
-            font-weight: 500;
-            letter-spacing: 1px;
-            margin: .4rem .8rem !important;
-            -webkit-transition: all 0.3s ease-in-out;
-            -moz-transition: all 0.3s ease-in-out;
-            transition: all 0.3s ease-in-out;
-            padding: 1rem 3rem;
-            border-radius: 3px;
-        }
-
-        .navbar-caption {
-            line-height: 2.2rem !important;
-            padding-right: 2rem;
-        }
-
-        .navbar-caption:hover {
-            text-decoration-line: none;
-        }
-
-        .link {
-            padding: .667em 1.667em !important;
-            margin: 0 !important;
-        }
-
-        .link:hover {
-            color: #c1c1c1 !important;
+        .city {
+            font-family: Poiret One;
+            font-size: 23pt;
         }
     </style>
 </head>
@@ -189,21 +75,120 @@
     </div>
 
 </div>
-<div class="container">
-    <div class="row">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Station name" aria-label="Recipient's username"
-                   aria-describedby="button-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+<div class="container" style="position:relative" id="map_section">
+    <div class="row" style="padding: 20px 0;background-color: lightgrey">
+        <div class="col-md-12" style="">
+            <div class="input-group mb-3"
+                 style="width: 30%;margin:auto;height: 100%">
+                <input type="text" class="form-control" placeholder="Recipient's username"
+                       aria-label="Recipient's username" aria-describedby="button-addon2"
+                       style="border-radius: 15px 0 0 15px;height: 100%">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-info" style="border-radius: 0 15px 15px 0;height: 100%">Info
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div style="position: absolute;z-index: 999;left: 15px;top: 50%">
+            <div class="container">
+                <div class="row" style="">
+                    <div class="col-2 col-md-2" style=";padding: 0;width: 10%">
+                        <button type="button" class="btn btn-primary btn-sm display-4" style="background: #2c3e50;border: 0;border-radius: 20px;">NOW</button>
+                    </div>
+                    <div class="col-10 col-md-10" style="">
+                        <input class="range-slider__range" type="range" value="250" min="0" max="500"
+                               step="50" style="background: white;">
+                        <span class="range-slider__value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position:absolute;z-index: 999;right: 0px;top: 0">
+            <div class="container">
+                <div class="row align-items-center"
+                     style="background: #FAFAFA;">
+                    <div class="city col-4">
+                        Dublin
+                    </div>
+                    <div class="col-8"
+                         style="font-family: Poiret One;font-size: 20px">
+                        <span style="margin-right: 10px">25&deg; CLOUDY</span>
+                        <i class="wi wi-thunderstorm" style="font-size: 35px;"></i>
+                    </div>
+                </div>
+                <div class="row"
+                     style=";color: white;font-family: Poiret One;">
+                    <div class="col-4" style="background: #5e5e5e;padding-bottom: 15px">
+                        <div class="row">
+                            <p style="margin: auto"> 15:00</p>
+                        </div>
+                        <div class="row align-items-end justify-content-center">
+                            <span style="font-size: 10pt;margin-right: 10px">25&deg;</span>
+                            <i class="wi wi-thunderstorm" style="font-size: 30px;"></i>
+                        </div>
+
+                    </div>
+                    <div class="col-4" style="background: #5e5e5e">
+                        <div class="row">
+                            <p style="margin: auto"> 15:00</p>
+                        </div>
+                        <div class="row align-items-end justify-content-center">
+                            <span style="font-size: 10pt;margin-right: 10px">25&deg;</span>
+                            <i class="wi wi-thunderstorm" style="font-size: 30px;"></i>
+                        </div>
+                    </div>
+                    <div class="col-4" style="background: #5e5e5e">
+                        <div class="row">
+                            <p style="margin: auto"> 15:00</p>
+                        </div>
+                        <div class="row align-items-end justify-content-center">
+                            <span style="font-size: 10pt;margin-right: 10px">25&deg;</span>
+                            <i class="wi wi-thunderstorm" style="font-size: 30px;"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row" style="border: #0d6786 solid;height: 800px">
-        <map>
-
-        </map>
+</div>
+<div class="container" style="padding: 0">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="mymap" style="height: 550px;"></div>
+        </div>
     </div>
 </div>
+
+<script>
+    var map;
+
+    function myMap() {
+        map = new google.maps.Map(document.getElementById('mymap'), {
+            center: new google.maps.LatLng(53.3471, -6.26059),
+            zoom: 13,
+        });
+    }
+
+    var rangeSlider = function () {
+        var slider = $('.range-slider'),
+            range = $('.range-slider__range'),
+            value = $('.range-slider__value');
+
+        slider.each(function () {
+            value.each(function () {
+                var value = $(this).prev().attr('value');
+                $(this).html(value);
+            });
+
+            range.on('input', function () {
+                $(this).next(value).html(this.value);
+            });
+        });
+    };
+
+</script>
+<script async defer
+        src=https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>
+</script>
 </body>
 </html>

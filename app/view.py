@@ -7,7 +7,7 @@ import json
 import time
 
 
-@app.route('/')
+# @app.route('/')
 def index():
     respose = requests.get(app.config["SECRET_WEATHER_KEY"])
     weather_json = respose.json()
@@ -36,10 +36,10 @@ def index():
 
     for i in dynamic_data:
         c1 = {'v': [int(i[0]), 0, 0]}
-        c2 = {'v': int(i[1]) / num_week}
+        # c2 = {'v': int(i[1]) / num_week}
+        c2 = {'v': int(i[1])}
         last_7_data['rows'].append({'c': [c1, c2]})
-    return render_template('index.html', map_key=app.config["SECRET_MAP_KEY"],
-                           bike_api_key=app.config['SECRET_JCD_KEY'], weather_json=weather_json,
+    return render_template('index.html', map_key=app.config["SECRET_MAP_KEY"], weather_json=weather_json,
                            station_list=json.dumps(stations_list_arr), last_7_data=json.dumps(last_7_data),
                            current3=current3)
 
@@ -70,7 +70,7 @@ def search():
     return jsonify(bike_current_json)
 
 
-# @app.route('/')
+@app.route('/')
 def new():
     respose = requests.get(app.config["SECRET_WEATHER_KEY"])
     weather_json = respose.json()
