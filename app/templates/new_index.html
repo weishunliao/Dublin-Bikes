@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slider.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/weather.css') }}"/>
-
     <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <title>Title</title>
@@ -21,13 +20,14 @@
         }
     </style>
 </head>
-<body>
-<div class="container-fluid" id="page_top">
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: transparent;">
+<body style="background-color: lightgrey">
+<div class="container-fluid" id="top_page" style="">
+    <nav class="navbar navbar-expand-lg navbar-light" id="nav_bar"
+         style="background-color: transparent;position: fixed;top: 0;left: 0;width: 100%">
         <a class="navbar-brand" href="#">
             <img src="{{ url_for('static', filename='img/logo.svg') }}" width="50" height="50"
                  class="d-inline-block align-top" alt="Dublin Bikes">
-            <a class="navbar-caption text-white display-7" href="#page_top">Dublin Bikes</a>
+            <a class="navbar-caption text-white display-7" href="#top_page" onclick="to_map()">Dublin Bikes</a>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,54 +56,54 @@
             </ul>
         </div>
     </nav>
-    <div class="embed-responsive embed-responsive-16by9 background">
-        <video width="320" height="240" style="opacity: 0.7; background-color: rgb(35, 35, 35);" autoplay muted loop>
-            <source src="{{ url_for('static',filename='img/Dublinbikes.mp4') }}#t=5" type="video/mp4">
-        </video>
-    </div>
-    <div class="row justify-content-md-center" style="margin-top: 150px;margin-bottom: 250px">
-        <div class="mbr-white col-md-10">
-            <h1 class="mbr-section-title align-center mbr-bold pb-3 mbr-fonts-style display-1">Discover Bike<br>Explore
-                Dublin</h1>
-            <p class="mbr-text align-center pb-3 display-5">
-                Unlock your ride and your city with this website, the smartest bike sharing system. You’ll never have to
-                worry about renting bikes and finding a parking station, just enjoy your ride.
-            </p>
-            <div class="mbr-section-btn align-center"><a class="btn btn-md btn-white-outline display-4" href="#">Find a
-                bike</a></div>
+    <div id='home_page'>
+        <div class="embed-responsive embed-responsive-16by9 background">
+            <video width="320" height="240" style="opacity: 0.7; background-color: rgb(35, 35, 35);" autoplay muted
+                   loop>
+                <source src="{{ url_for('static',filename='img/Dublinbikes.mp4') }}#t=5" type="video/mp4">
+            </video>
+        </div>
+        <div class="row justify-content-md-center" style="margin-top: 150px;margin-bottom: 250px">
+            <div class="mbr-white col-md-10">
+                <h1 class="mbr-section-title align-center mbr-bold pb-3 mbr-fonts-style display-1">Discover Bike<br>Explore
+                    Dublin</h1>
+                <p class="mbr-text align-center pb-3 display-5">
+                    Unlock your ride and your city with this website, the smartest bike sharing system. You’ll never
+                    have to
+                    worry about renting bikes and finding a parking station, just enjoy your ride.
+                </p>
+                <div class="mbr-section-btn align-center"><a class="btn btn-md btn-white-outline display-4"
+                                                             onclick="to_map()">Find a
+                    bike</a></div>
+            </div>
         </div>
     </div>
 
 </div>
-<div class="container" style="position:relative" id="map_section">
-    <div class="row" style="padding: 20px 0;background-color: lightgrey">
-        <div class="col-md-12" style="">
-            <div class="input-group mb-3"
-                 style="width: 30%;margin:auto;height: 100%">
-                <input type="text" class="form-control" placeholder="Recipient's username"
-                       aria-label="Recipient's username" aria-describedby="button-addon2"
-                       style="border-radius: 15px 0 0 15px;height: 100%">
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-info" style="border-radius: 0 15px 15px 0;height: 100%">Info
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div style="position: absolute;z-index: 999;left: 15px;top: 50%">
-            <div class="container">
-                <div class="row" style="">
-                    <div class="col-2 col-md-2" style=";padding: 0;width: 10%">
-                        <button type="button" class="btn btn-primary btn-sm display-4" style="background: #2c3e50;border: 0;border-radius: 20px;">NOW</button>
+<div id="map_page" style="display: none">
+    <div class="container" style="position:relative;">
+        <div class="row" style="padding: 30px 0 0 0;">
+            <div class="col-md-12" style="">
+                <div class="input-group mb-3"
+                     style="width: 35%;margin:auto;height: 100%">
+                    <div class="autocomplete col-9" style="padding: 0">
+                        <input id="search_box" type="text" placeholder="Station name, Street name..."
+                               class="form-control"
+                               style="border-radius: 15px 0 0 15px;height: 80%">
                     </div>
-                    <div class="col-10 col-md-10" style="">
-                        <input class="range-slider__range" type="range" value="250" min="0" max="500"
-                               step="50" style="background: white;">
-                        <span class="range-slider__value">0</span>
+                    <div class="input-group-append col-3" style="padding: 0;">
+                        <button type="button" class="btn btn-info" style="border-radius: 0 15px 15px 0;height: 80%"
+                                onclick=open_info_window()>Search
+                        </button>
                     </div>
                 </div>
             </div>
+
+
         </div>
-        <div style="position:absolute;z-index: 999;right: 0px;top: 0">
+    </div>
+    <div class="container" style="padding: 0;position: relative">
+        <div style="position:absolute;z-index: 999;right: 5px;top: 5px">
             <div class="container">
                 <div class="row align-items-center"
                      style="background: #FAFAFA;">
@@ -149,46 +149,102 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="container" style="padding: 0">
-    <div class="row">
-        <div class="col-md-12">
-            <div id="mymap" style="height: 550px;"></div>
+        <div style="position: absolute;z-index: 999;left: 15px;top:15px;">
+            <div class="container">
+                <div class="row" style="">
+                    <div class="col-2 col-md-2" style=";padding: 0;width: 10%">
+                        <button type="button" class="btn btn-primary btn-sm display-4"
+                                style="background: #2c3e50;border: 0;border-radius: 20px;" onclick="back_to_now()">NOW
+                        </button>
+                    </div>
+                    <div class="col-10 col-md-10" style="">
+                        <input class="range-slider__range" type="range" value="12" min="0" max="23"
+                               step="1" style="background: white;" id="time_slider">
+                        <span class="range-slider__value" id="SliderVal">Now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="bike_map" style="height: 650px"></div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    var map;
+    function to_map() {
+        let home = document.getElementById('home_page');
+        let map = document.getElementById('map_page');
+        if (map.style.display == 'none') {
+            home.style.display = 'none';
+            document.getElementById('nav_bar').style.backgroundColor = 'grey';
+            map.style.display = '';
+        } else {
+            home.style.display = '';
+            document.getElementById('nav_bar').style.backgroundColor = 'transparent';
+            map.style.display = 'none';
+        }
 
-    function myMap() {
-        map = new google.maps.Map(document.getElementById('mymap'), {
-            center: new google.maps.LatLng(53.3471, -6.26059),
-            zoom: 13,
-        });
     }
 
-    var rangeSlider = function () {
-        var slider = $('.range-slider'),
-            range = $('.range-slider__range'),
-            value = $('.range-slider__value');
 
-        slider.each(function () {
-            value.each(function () {
-                var value = $(this).prev().attr('value');
-                $(this).html(value);
-            });
+    var historical_data;
+    $.get("/update_map?t=all", function (response) {
+        historical_data = response;
+    });
 
-            range.on('input', function () {
-                $(this).next(value).html(this.value);
-            });
+    time_slider_obj = $("#time_slider");
+    time_slider_obj.on('change', function () {
+        let val = $("#time_slider").val();
+        $("#SliderVal").text(val + ":00");
+        clear_markers();
+        draw_marker(historical_data[parseInt(val)])
+    });
+    var time_galobal = "current";
+
+    function open_info_window() {
+        let marker = markers[0].obj;
+        let content = markers[0].content;
+        let station_name = document.getElementById('search_box').value;
+        for (let i = 0; i < markers.length; i++) {
+            if (markers[i].title == station_name) {
+                marker = markers[i].obj;
+                content = markers[i].content;
+                break;
+            }
+        }
+        var infowindow = new google.maps.InfoWindow({
+            content: content,
+            maxWidth: 500
         });
-    };
+        if (active_marker_obj != null) {
+            active_marker_obj.close();
+        }
+        active_marker_obj = infowindow;
+        infowindow.open(marker.get("map"), marker);
+    }
 
+    function back_to_now() {
+        $("#time_slider").val({{ current3 }});
+        $("#SliderVal").text('Now');
+        time_galobal = "current";
+        $.get("/update_map?t=current", function (response) {
+            clear_markers();
+            draw_marker(response);
+        });
+    }
 </script>
 <script async defer
+        {#        src= {{ map_key }}>#}
         src=https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>
 </script>
+<script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"
+        current=""></script>
+
+<script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"
+        data=station_list></script>
+
 </body>
 </html>
