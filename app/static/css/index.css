@@ -101,7 +101,7 @@
     -moz-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
     padding: 1rem 3rem;
-    border-radius: 3px;
+    border-radius: 2.5rem;
 }
 
 .navbar-caption {

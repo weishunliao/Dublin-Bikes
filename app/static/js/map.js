@@ -355,17 +355,127 @@ function draw_marker(response_json) {
             image.url = 'static/img/grey.png';
         }
 
-        let content = "<div>";
+        // let content = "<div>";
         var marker = new google.maps.Marker({
             position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
             map: map,
             icon: image,
             title: String(response_json[i].name)
         });
-        content += "<h4>Station: " + response_json[i].name + "</h4>";
-        content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
-        content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
-        content += "</div>";
+        // content += "<h4>Station: " + response_json[i].name + "</h4>";
+        // content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
+        // content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
+        // content += "</div>";
+        let content = '<div class="container" style="font-family: Rubik;padding: 0;">\n' +
+            '    <div class="row" style="">\n' +
+            '        <div class="col-12" style="padding: 0">\n' +
+            '            <div id="wrap-box_now">\n' +
+            '                <div class="row justify-content-center" style=";margin: 20px">\n' +
+            '                    <div class=\'col-12 justify-content-center\' style=";text-align: center;">\n' +
+            '                        <h2 style="font-size: 1.5rem;">No.36 - Station Name</h2>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="row justify-content-center" style=";margin: 20px;">\n' +
+            '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
+            '                        <img src="static/img/bicycle.svg" width="100%" height="100%">\n' +
+            '                    </div>\n' +
+            '                    <div class="col-10 d-flex"\n' +
+            '                         style=";background-color: lightgrey;align-items: center;color: black">\n' +
+            '                        <div style="text-align: center;font-size: 13pt;">\n' +
+            '                            <span>Available bikes: 5</span>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="row justify-content-center" style=";margin: 20px;">\n' +
+            '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
+            '                        <img src="static/img/parking.svg" width="100%" height="100%">\n' +
+            '                    </div>\n' +
+            '                    <div class="col-10 d-flex"\n' +
+            '                         style=";background-color: lightgrey;align-items: center;">\n' +
+            '                        <div class="" style="margin: 0;font-size: 13pt;">\n' +
+            '                            <span>Free stands: 27</span>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="row justify-content-center" style=";;;margin: 20px">\n' +
+            '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
+            '                        <img src="static/img/visa.svg" width="100%" height="100%">\n' +
+            '                    </div>\n' +
+            '                    <div class="col-10 d-flex"\n' +
+            '                         style=";background-color: lightgrey;align-items: center;">\n' +
+            '                        <div style="text-align: center;font-size: 13pt;">\n' +
+            '                            <span>Credit cards: NO</span>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div id="wrap-box_feature" style="display: none;">\n' +
+            '                <div class="row justify-content-center" style=";margin: 20px">\n' +
+            '                    <div class=\'col-12 justify-content-center\' style=";text-align: center;">\n' +
+            '                        <h2 style="font-size: 1.5rem;">Next 2 Hours</h2>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="row justify-content-center" style=";margin: 20px">\n' +
+            '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
+            '                        <img src="static/img/bicycle.svg" width="100%" height="100%">\n' +
+            '                    </div>\n' +
+            '                    <div class="col-10 d-flex"\n' +
+            '                         style=";background-color: lightgrey;align-items: center;color: black">\n' +
+            '                        <div style="text-align: center;font-size: 13pt;;">\n' +
+            '                            <span>Available bikes: 5</span>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="row justify-content-center" style=";margin: 20px">\n' +
+            '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
+            '                        <img src="static/img/parking.svg" width="100%" height="100%">\n' +
+            '                    </div>\n' +
+            '                    <div class="col-10 d-flex"\n' +
+            '                         style=";background-color: lightgrey;align-items: center;">\n' +
+            '                        <div class="" style="margin: 0;font-size: 13pt;;">\n' +
+            '                            <span>Free stands: 27</span>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="row justify-content-center" style=";;;margin: 20px">\n' +
+            '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
+            '                        <img src="static/img/euro.svg" width="100%" height="100%">\n' +
+            '                    </div>\n' +
+            '                    <div class="col-10 d-flex"\n' +
+            '                         style=";background-color: lightgrey;align-items: center;">\n' +
+            '                        <div style="text-align: center;font-size: 13pt;">\n' +
+            '                            <span>Credit cards accept: NO</span>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div id="wrap-box_past24" style="display:none">\n' +
+            '                <div class="row justify-content-center" style=";padding: 0;">\n' +
+            '                    <div id="chart_div" style="padding: 0">\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="row justify-content-center" style=";margin: 20px">\n' +
+            '                <div class="col-4 d-flex justify-content-center" style=";align-items: center;">\n' +
+            '                    <button type="button" class="btn btn-outline-info button_font_size" style=";padding: 1px 6px;" onclick="to_past24()">\n' +
+            '                        Past 24\n' +
+            '                    </button>\n' +
+            '                </div>\n' +
+            '                <div class="col-4 d-flex justify-content-center" style=";align-items: center;">\n' +
+            '                    <button type="button" class="btn btn-outline-info button_font_size" style="padding: 1px 15px" onclick="to_now()">\n' +
+            '                        Now\n' +
+            '                    </button>\n' +
+            '                </div>\n' +
+            '                <div class="col-4 d-flex justify-content-center" style="align-items: center;">\n' +
+            '                    <button type="button" class="btn btn-outline-info button_font_size" style="padding: 1px 15px;" onclick="to_feature()">\n' +
+            '                        Feature\n' +
+            '                    </button>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '\n' +
+            '    </div>\n' +
+            '</div>';
         let mker = {};
         mker.title = marker.title;
         mker.obj = marker;
@@ -393,4 +503,26 @@ function show_info(marker, content) {
         active_marker_obj = infowindow;
         infowindow.open(marker.get("map"), marker);
     });
+}
+
+google.charts.load('current', {'packages': ['corechart']});
+
+
+function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+        ['Year', 'Sales', 'Expenses'],
+        ['2013', 1000, 400],
+        ['2014', 1170, 460],
+        ['2015', 660, 1120],
+        ['2016', 1030, 540]
+    ]);
+
+    var options = {
+        title: 'Company Performance',
+        legend: {position: 'none'},
+        chartArea: {'width': '75%', 'height': '80%'},
+    };
+
+    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
 }

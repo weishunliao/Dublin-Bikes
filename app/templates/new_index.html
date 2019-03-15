@@ -4,26 +4,33 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i"
           rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css">
     <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slider.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/weather.css') }}"/>
     <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
     <title>Title</title>
     <style>
         .city {
             font-family: Poiret One;
             font-size: 23pt;
         }
+        @media screen and (max-width: 600px) {
+            .button_font_size {
+                font-size: 16px;
+                padding: 1px 6px;
+            }
+        }
     </style>
 </head>
 <body style="background-color: lightgrey">
 <div class="container-fluid" id="top_page" style="">
     <nav class="navbar navbar-expand-lg navbar-light" id="nav_bar"
-         style="background-color: transparent;position: fixed;top: 0;left: 0;width: 100%">
+         style="background-color: transparent;position: fixed;top: 0;left: 0;width: 100%;font-family: Poiret One;font-weight: bolder">
         <a class="navbar-brand" href="#">
             <img src="{{ url_for('static', filename='img/logo.svg') }}" width="50" height="50"
                  class="d-inline-block align-top" alt="Dublin Bikes">
@@ -72,9 +79,12 @@
                     have to
                     worry about renting bikes and finding a parking station, just enjoy your ride.
                 </p>
-                <div class="mbr-section-btn align-center"><a class="btn btn-md btn-white-outline display-4"
-                                                             onclick="to_map()">Find a
-                    bike</a></div>
+                <div class="mbr-section-btn align-center">
+                    <button type="button" class="btn btn-md btn-white-outline"
+                            onclick="to_map()">Find a
+                        bike
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -89,10 +99,10 @@
                     <div class="autocomplete col-9" style="padding: 0">
                         <input id="search_box" type="text" placeholder="Station name, Street name..."
                                class="form-control"
-                               style="border-radius: 15px 0 0 15px;height: 80%">
+                               style="border-radius: 5px 0 0 5px;height: 80%">
                     </div>
                     <div class="input-group-append col-3" style="padding: 0;">
-                        <button type="button" class="btn btn-info" style="border-radius: 0 15px 15px 0;height: 80%"
+                        <button type="button" class="btn btn-info" style="border-radius: 0 5px 5px 0;height: 80%"
                                 onclick=open_info_window()>Search
                         </button>
                     </div>
@@ -102,8 +112,8 @@
 
         </div>
     </div>
-    <div class="container" style="padding: 0;position: relative">
-        <div style="position:absolute;z-index: 999;right: 5px;top: 5px">
+    <div class="container" style="padding: 0;position: relative;">
+        <div style="position:absolute;z-index: 999;right: 5px;top: 5px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
             <div class="container">
                 <div class="row align-items-center"
                      style="background: #FAFAFA;">
@@ -111,7 +121,7 @@
                         Dublin
                     </div>
                     <div class="col-8"
-                         style="font-family: Poiret One;font-size: 20px">
+                         style="font-family: Poiret One;font-size: 20px;font-weight: bolder">
                         <span style="margin-right: 10px">25&deg; CLOUDY</span>
                         <i class="wi wi-thunderstorm" style="font-size: 35px;"></i>
                     </div>
@@ -160,7 +170,7 @@
                     <div class="col-10 col-md-10" style="">
                         <input class="range-slider__range" type="range" value="12" min="0" max="23"
                                step="1" style="background: white;" id="time_slider">
-                        <span class="range-slider__value" id="SliderVal">Now</span>
+                        <span class="range-slider__value" id="SliderVal"></span>
                     </div>
                 </div>
             </div>
@@ -174,17 +184,21 @@
 </div>
 
 <script>
+    var d = new Date();
+    var h = d.getUTCHours();
+    var m = d.getMinutes();
+    $('#SliderVal').text(h + ":" + m);
+
     function to_map() {
-        let home = document.getElementById('home_page');
         let map = document.getElementById('map_page');
         if (map.style.display == 'none') {
-            home.style.display = 'none';
-            document.getElementById('nav_bar').style.backgroundColor = 'grey';
-            map.style.display = '';
+            $("#home_page").fadeOut("slow");
+            $("#map_page").fadeIn("slow");
+            document.getElementById('nav_bar').style.backgroundColor = '#5e5e5e';
         } else {
-            home.style.display = '';
             document.getElementById('nav_bar').style.backgroundColor = 'transparent';
-            map.style.display = 'none';
+            $("#map_page").fadeOut("slow");
+            $("#home_page").fadeIn("slow");
         }
 
     }
@@ -228,14 +242,42 @@
 
     function back_to_now() {
         $("#time_slider").val({{ current3 }});
-        $("#SliderVal").text('Now');
+        $('#SliderVal').text(h + ":" + m);
         time_galobal = "current";
         $.get("/update_map?t=current", function (response) {
             clear_markers();
             draw_marker(response);
         });
     }
+
+    function to_feature() {
+        if (document.getElementById("wrap-box_feature").style.display === "none") {
+            document.getElementById("wrap-box_now").style.display = 'none';
+            document.getElementById("wrap-box_past24").style.display = 'none';
+            $("#wrap-box_feature").fadeIn("slow");
+        }
+    }
+
+    function to_now() {
+        if (document.getElementById("wrap-box_now").style.display === "none") {
+            document.getElementById("wrap-box_feature").style.display = 'none';
+            document.getElementById("wrap-box_past24").style.display = 'none';
+            $("#wrap-box_now").fadeIn("slow");
+        }
+    }
+
+    function to_past24() {
+        drawChart();
+        if (document.getElementById("wrap-box_past24").style.display === "none") {
+            document.getElementById("wrap-box_feature").style.display = 'none';
+            document.getElementById("wrap-box_now").style.display = 'none';
+            $("#wrap-box_past24").fadeIn("slow");
+        }
+    }
+
+
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script async defer
         {#        src= {{ map_key }}>#}
         src=https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>
