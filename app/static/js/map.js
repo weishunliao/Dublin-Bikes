@@ -439,7 +439,7 @@ function draw_marker(response_json) {
             '                </div>\n' +
             '                <div class="row justify-content-center" style=";;;margin: 20px">\n' +
             '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
-            '                        <img src="static/img/euro.svg" width="100%" height="100%">\n' +
+            '                        <img src="static/img/visa.svg" width="100%" height="100%">\n' +
             '                    </div>\n' +
             '                    <div class="col-10 d-flex"\n' +
             '                         style=";background-color: lightgrey;align-items: center;">\n' +
