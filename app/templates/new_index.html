@@ -19,6 +19,7 @@
             font-family: Poiret One;
             font-size: 23pt;
         }
+
         @media screen and (max-width: 600px) {
             .button_font_size {
                 font-size: 16px;
@@ -182,7 +183,13 @@
         </div>
     </div>
 </div>
-
+<div class="input-group">
+  <input type="text" aria-label="start" class="form-control" id="route_start" placeholder="From...">
+  <input type="text" aria-label="destination" class="form-control" id="route_end" placeholder="Destination">
+    <div class="input-group-prepend">
+        <button type="button" class="btn btn-success" onclick="calcRoute()">Go</button>
+    </div>
+</div>
 <script>
     var d = new Date();
     var h = d.getUTCHours();
@@ -242,9 +249,14 @@
 
     function back_to_now() {
         $("#time_slider").val({{ current3 }});
-        $('#SliderVal').text(h + ":" + m);
         time_galobal = "current";
         $.get("/update_map?t=current", function (response) {
+            h = d.getUTCHours();
+            m = d.getMinutes();
+            if(h<10){
+                h = "0" + h;
+            }
+            $('#SliderVal').text(h + ":" + m);
             clear_markers();
             draw_marker(response);
         });
@@ -279,8 +291,8 @@
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script async defer
-                src= {{ map_key }}>
-        {#src=https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>#}
+        src= {{ map_key }}>
+    {#src=https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>#}
 </script>
 <script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"
         current=""></script>

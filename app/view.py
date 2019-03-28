@@ -68,11 +68,3 @@ def search():
             bike_current_json.append(bike_data)
         # print(bike_current_json)
     return jsonify(bike_current_json)
-
-
-# @app.route('/')
-def new():
-    respose = requests.get(app.config["SECRET_WEATHER_KEY"])
-    weather_json = respose.json()
-    respose.close()
-    return render_template('new_index.html', weather_json=weather_json)

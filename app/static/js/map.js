@@ -1,8 +1,11 @@
 var markers = [];
 var map;
 var active_marker_obj;
+var directionsService;
+var directionsDisplay;
 
 function myMap() {
+
     var styledMapType = new google.maps.StyledMapType(
         [
             {
@@ -328,6 +331,22 @@ function myMap() {
     map = new google.maps.Map(document.getElementById('bike_map'), mapProp);
     map.mapTypes.set('styled_map', styledMapType);
     map.setMapTypeId('styled_map');
+    directionsService = new google.maps.DirectionsService();
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay.setMap(map);
+
+    var defaultBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(53.281561, -6.364376),
+        new google.maps.LatLng(53.400044, -6.215727));
+
+    var input1 = document.getElementById('route_start');
+    var input2 = document.getElementById('route_end');
+    var options = {
+        bounds: defaultBounds,
+        types: ['establishment']
+    };
+    var autocomplete1 = new google.maps.places.Autocomplete(input1, options);
+    var autocomplete2 = new google.maps.places.Autocomplete(input2, options);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -366,13 +385,19 @@ function draw_marker(response_json) {
         // content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
         // content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
         // content += "</div>";
+        let banking;
+        if (response_json[i].banking == true) {
+            banking = "Yes";
+        } else {
+            banking = "No";
+        }
         let content = '<div class="container" style="font-family: Rubik;padding: 0;">\n' +
             '    <div class="row" style="">\n' +
             '        <div class="col-12" style="padding: 0">\n' +
             '            <div id="wrap-box_now">\n' +
             '                <div class="row justify-content-center" style=";margin: 20px">\n' +
             '                    <div class=\'col-12 justify-content-center\' style=";text-align: center;">\n' +
-            '                        <h2 style="font-size: 1.5rem;">No.36 - Station Name</h2>\n' +
+            '                        <h2 style="font-size: 1.5rem;">' + response_json[i].number + ' - ' + response_json[i].name + '</h2>\n' +
             '                    </div>\n' +
             '                </div>\n' +
             '                <div class="row justify-content-center" style=";margin: 20px;">\n' +
@@ -382,7 +407,7 @@ function draw_marker(response_json) {
             '                    <div class="col-10 d-flex"\n' +
             '                         style=";background-color: lightgrey;align-items: center;color: black">\n' +
             '                        <div style="text-align: center;font-size: 13pt;">\n' +
-            '                            <span>Available bikes: 5</span>\n' +
+            '                            <span>Available bikes: ' + response_json[i].available_bikes + '</span>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>\n' +
@@ -393,7 +418,7 @@ function draw_marker(response_json) {
             '                    <div class="col-10 d-flex"\n' +
             '                         style=";background-color: lightgrey;align-items: center;">\n' +
             '                        <div class="" style="margin: 0;font-size: 13pt;">\n' +
-            '                            <span>Free stands: 27</span>\n' +
+            '                            <span>Free stands: ' + response_json[i].available_bike_stands + '</span>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>\n' +
@@ -404,7 +429,7 @@ function draw_marker(response_json) {
             '                    <div class="col-10 d-flex"\n' +
             '                         style=";background-color: lightgrey;align-items: center;">\n' +
             '                        <div style="text-align: center;font-size: 13pt;">\n' +
-            '                            <span>Credit cards: NO</span>\n' +
+            '                            <span>Credit cards: ' + banking + '</span>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>\n' +
@@ -480,6 +505,10 @@ function draw_marker(response_json) {
         mker.title = marker.title;
         mker.obj = marker;
         mker.content = content;
+        mker.lat = response_json[i].position.lat;
+        mker.lng = response_json[i].position.lng;
+        mker.available_bike = response_json[i].available_bikes;
+        mker.available_bike_stands = response_json[i].available_bike_stands;
         markers.push(mker);
         show_info(marker, content);
     }
@@ -525,4 +554,66 @@ function drawChart() {
 
     var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
     chart.draw(data, options);
+}
+
+
+function getDistance(x_1, x_2, y_1, y_2) {
+    let n = (x_1 - x_2) * (x_1 - x_2) + (y_1 - y_2) * (y_1 - y_2);
+    return Math.sqrt(n);
+}
+
+
+function calcRoute() {
+    let start = document.getElementById('route_start').value;
+    let url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + start + "&key=AIzaSyC8LCHyymh52e52Y0-UM6NEfRbERgst13A";
+    var start_station_index = 0;
+    let wpts = [];
+    $.get(url, function (data, status) {
+        let lat = (data.results)[0].geometry.location.lat;
+        let lng = (data.results)[0].geometry.location.lng;
+        let min = getDistance(lat, markers[0].lat, lng, markers[0].lng);
+        for (let i = 1; i < markers.length; i++) {
+            let dis = getDistance(lat, markers[i].lat, lng, markers[i].lng);
+            if (dis < min && markers[i].available_bike >= 5) {
+                min = dis;
+                start_station_index = i;
+            }
+        }
+        let start_point = {
+            location: {lat: markers[start_station_index].lat, lng: markers[start_station_index].lng},
+            stopover: true
+        };
+        wpts.push(start_point);
+    });
+    let end = document.getElementById('route_end').value;
+    var end_station_index = 0;
+    $.get(url, function (data, status) {
+        let lat = (data.results)[0].geometry.location.lat;
+        let lng = (data.results)[0].geometry.location.lng;
+        let min = getDistance(lat, markers[0].lat, lng, markers[0].lng);
+        for (let i = 1; i < markers.length; i++) {
+            let dis = getDistance(lat, markers[i].lat, lng, markers[i].lng);
+            if (dis < min && markers[i].available_bike_stands >= 5) {
+                min = dis;
+                end_station_index = i;
+            }
+        }
+        let end_point = {
+            location: {lat: markers[end_station_index].lat, lng: markers[end_station_index].lng},
+            stopover: true
+        };
+        wpts.push(end_point);
+    });
+    var request = {
+        origin: start,
+        destination: end,
+        travelMode: 'BICYCLING',
+        waypoints: wpts
+    };
+    directionsService.route(request, function (result, status) {
+        if (status == 'OK') {
+            clear_markers();
+            directionsDisplay.setDirections(result);
+        }
+    });
 }
