@@ -505,7 +505,7 @@ function draw_marker(response_json) {
         let mker = {};
         mker.title = marker.title;
         mker.obj = marker;
-        // mker.content = content;
+        mker.content = content;
         mker.lat = response_json[i].position.lat;
         mker.lng = response_json[i].position.lng;
         mker.available_bike = response_json[i].available_bikes;
