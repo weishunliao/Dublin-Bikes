@@ -3,9 +3,14 @@ var map;
 var active_marker_obj;
 var directionsService;
 var directionsDisplay;
+var station_inform;
+
+
+$.get("/update_map?t=current", function (response) {
+    station_inform = response;
+});
 
 function myMap() {
-
     var styledMapType = new google.maps.StyledMapType(
         [
             {
@@ -314,8 +319,7 @@ function myMap() {
         let geo = {};
         geo.lat = position.coords.latitude;
         geo.lng = position.coords.longitude;
-        // geo.lat=53.3375;
-        // geo.lng = -6.25294;
+
         let img = {
             url: 'static/img/pin.svg',
             origin: new google.maps.Point(0, 0),
@@ -333,7 +337,7 @@ function myMap() {
     map.setMapTypeId('styled_map');
     directionsService = new google.maps.DirectionsService();
     directionsDisplay = new google.maps.DirectionsRenderer();
-    directionsDisplay.setMap(map);
+    directionsDisplay.setOptions({suppressMarkers: true});
 
     var defaultBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(53.281561, -6.364376),
@@ -374,17 +378,13 @@ function draw_marker(response_json) {
             image.url = 'static/img/grey.png';
         }
 
-        // let content = "<div>";
         var marker = new google.maps.Marker({
             position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
             map: map,
             icon: image,
             title: String(response_json[i].name)
         });
-        // content += "<h4>Station: " + response_json[i].name + "</h4>";
-        // content += "<p>Available bike stands: " + response_json[i].available_bike_stands + "<br>";
-        // content += "Available bikes: " + response_json[i].available_bikes + "<br></p>";
-        // content += "</div>";
+
         let banking;
         if (response_json[i].banking == true) {
             banking = "Yes";
@@ -514,7 +514,26 @@ function draw_marker(response_json) {
     }
 }
 
+function draw_marker_short(response_json) {
+    markers = [];
+    for (let i = 0; i < response_json.length; i++) {
+        var marker = new google.maps.Marker({
+            position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
+        });
+
+        let mker = {};
+        mker.title = marker.title;
+        mker.obj = marker;
+        mker.lat = response_json[i].position.lat;
+        mker.lng = response_json[i].position.lng;
+        mker.available_bike = response_json[i].available_bikes;
+        mker.available_bike_stands = response_json[i].available_bike_stands;
+        markers.push(mker);
+    }
+}
+
 function clear_markers() {
+    directionsDisplay.setMap(null);
     for (var i = 0; i < markers.length; i++) {
         markers[i].obj.setMap(null);
     }
@@ -535,7 +554,6 @@ function show_info(marker, content) {
 }
 
 google.charts.load('current', {'packages': ['corechart']});
-
 
 function drawChart() {
     var data = google.visualization.arrayToDataTable([
@@ -562,58 +580,145 @@ function getDistance(x_1, x_2, y_1, y_2) {
     return Math.sqrt(n);
 }
 
+var direction_points;
 
-function calcRoute() {
+function calc_display_route() {
+    var end = document.getElementById('route_end').value;
+    var start = document.getElementById('route_start').value;
+    direction_points = [];
+    clear_markers();
+    draw_marker_short(station_inform);
+    let promise1 = new Promise(function (resolve, reject) {
+        $.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + end + "&key=AIzaSyC8LCHyymh52e52Y0-UM6NEfRbERgst13A", function (data, status) {
+            let lat = (data.results)[0].geometry.location.lat;
+            let lng = (data.results)[0].geometry.location.lng;
+            direction_points.push([lat, lng]);
+            let min = getDistance(lat, markers[0].lat, lng, markers[0].lng);
+            let station_index = 0;
+            for (let i = 1; i < markers.length; i++) {
+                let dis = getDistance(lat, markers[i].lat, lng, markers[i].lng);
+                if (dis < min && markers[i].available_bike_stands >= 5) {
+                    min = dis;
+                    station_index = i;
+                }
+            }
+            direction_points.push([markers[station_index].lat, markers[station_index].lng]);
+            resolve();
+        });
+    });
+    promise1.then(function () {
+        return new Promise(function (resolve, reject) {
+            $.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + start + "&key=AIzaSyC8LCHyymh52e52Y0-UM6NEfRbERgst13A", function (data, status) {
+                let lat = (data.results)[0].geometry.location.lat;
+                let lng = (data.results)[0].geometry.location.lng;
+                direction_points.push([lat, lng]);
+                let min = getDistance(lat, markers[0].lat, lng, markers[0].lng);
+                let station_index = 0;
+                for (let i = 1; i < markers.length; i++) {
+                    let dis = getDistance(lat, markers[i].lat, lng, markers[i].lng);
+                    if (dis < min && markers[i].available_bike >= 5) {
+                        min = dis;
+                        station_index = i;
+                    }
+                }
+                direction_points.push([markers[station_index].lat, markers[station_index].lng]);
+                resolve();
+            });
+        });
+    }).then(displayRoute);
+}
+
+
+function displayRoute() {
     let start = document.getElementById('route_start').value;
-    let url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + start + "&key=AIzaSyC8LCHyymh52e52Y0-UM6NEfRbERgst13A";
-    var start_station_index = 0;
-    let wpts = [];
-    $.get(url, function (data, status) {
-        let lat = (data.results)[0].geometry.location.lat;
-        let lng = (data.results)[0].geometry.location.lng;
-        let min = getDistance(lat, markers[0].lat, lng, markers[0].lng);
-        for (let i = 1; i < markers.length; i++) {
-            let dis = getDistance(lat, markers[i].lat, lng, markers[i].lng);
-            if (dis < min && markers[i].available_bike >= 5) {
-                min = dis;
-                start_station_index = i;
-            }
-        }
-        let start_point = {
-            location: {lat: markers[start_station_index].lat, lng: markers[start_station_index].lng},
-            stopover: true
-        };
-        wpts.push(start_point);
-    });
     let end = document.getElementById('route_end').value;
-    var end_station_index = 0;
-    $.get(url, function (data, status) {
-        let lat = (data.results)[0].geometry.location.lat;
-        let lng = (data.results)[0].geometry.location.lng;
-        let min = getDistance(lat, markers[0].lat, lng, markers[0].lng);
-        for (let i = 1; i < markers.length; i++) {
-            let dis = getDistance(lat, markers[i].lat, lng, markers[i].lng);
-            if (dis < min && markers[i].available_bike_stands >= 5) {
-                min = dis;
-                end_station_index = i;
-            }
-        }
-        let end_point = {
-            location: {lat: markers[end_station_index].lat, lng: markers[end_station_index].lng},
-            stopover: true
-        };
-        wpts.push(end_point);
-    });
-    var request = {
+    // console.log(direction_points);
+    let request = {
         origin: start,
         destination: end,
-        travelMode: 'BICYCLING',
-        waypoints: wpts
+        travelMode: 'WALKING',
+        waypoints: [{
+            location: {
+                lat: direction_points[3][0],
+                lng: direction_points[3][1],
+            }
+        }, {
+            location: {
+                lat: direction_points[1][0],
+                lng: direction_points[1][1],
+            }
+        }],
     };
     directionsService.route(request, function (result, status) {
-        if (status == 'OK') {
-            clear_markers();
-            directionsDisplay.setDirections(result);
+            if (status == 'OK') {
+                clear_markers();
+                directionsDisplay.setMap(map);
+                markers = [];
+                directionsDisplay.setDirections(result);
+
+                let image = {};
+                image.origin = new google.maps.Point(0, 0);
+                image.scaledSize = new google.maps.Size(40, 40);
+                image.url = 'static/img/green.png';
+
+                let image2 = {};
+                image2.origin = new google.maps.Point(0, 0);
+                image2.scaledSize = new google.maps.Size(45, 45);
+                image2.url = 'static/img/start.svg';
+
+                let image3 = {};
+                image3.origin = new google.maps.Point(0, 0);
+                image3.scaledSize = new google.maps.Size(45, 45);
+                image3.url = 'static/img/flag.svg';
+
+                let marker_B = new google.maps.Marker({
+                    position: {
+                        lat: direction_points[3][0],
+                        lng: direction_points[3][1]
+                    },
+                    map: map,
+                    icon: image,
+                });
+                mker = {};
+                mker.obj = marker_B;
+                markers.push(mker);
+
+                let marker_A = new google.maps.Marker({
+                    position: {
+                        lat: direction_points[0][0],
+                        lng: direction_points[0][1]
+                    },
+                    map: map,
+                    icon: image3,
+                });
+                mker = {};
+                mker.obj = marker_A;
+                markers.push(mker);
+
+                let marker_C = new google.maps.Marker({
+                    position: {
+                        lat: direction_points[1][0],
+                        lng: direction_points[1][1]
+                    },
+                    map: map,
+                    icon: image,
+                });
+                mker = {};
+                mker.obj = marker_C;
+                markers.push(mker);
+
+                marker_D = new google.maps.Marker({
+                    position: {
+                        lat: direction_points[2][0],
+                        lng: direction_points[2][1]
+                    },
+                    map: map,
+                    icon: image2,
+                });
+                mker = {};
+                mker.obj = marker_D;
+                markers.push(mker);
+            }
         }
-    });
+    );
 }
