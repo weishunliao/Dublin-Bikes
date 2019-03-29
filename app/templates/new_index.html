@@ -184,8 +184,8 @@
     </div>
 </div>
 <div class="input-group">
-  <input type="text" aria-label="start" class="form-control" id="route_start" placeholder="From...">
-  <input type="text" aria-label="destination" class="form-control" id="route_end" placeholder="Destination">
+    <input type="text" aria-label="start" class="form-control" id="route_start" placeholder="From...">
+    <input type="text" aria-label="destination" class="form-control" id="route_end" placeholder="Destination">
     <div class="input-group-prepend">
         <button type="button" class="btn btn-success" onclick="calc_display_route()">Go</button>
     </div>
@@ -253,7 +253,7 @@
         $.get("/update_map?t=current", function (response) {
             h = d.getUTCHours();
             m = d.getMinutes();
-            if(h<10){
+            if (h < 10) {
                 h = "0" + h;
             }
             $('#SliderVal').text(h + ":" + m);
@@ -278,13 +278,27 @@
         }
     }
 
-    function to_past24() {
-        drawChart();
+    function to_past24(id) {
+        drawChart(id);
         if (document.getElementById("wrap-box_past24").style.display === "none") {
             document.getElementById("wrap-box_feature").style.display = 'none';
             document.getElementById("wrap-box_now").style.display = 'none';
             $("#wrap-box_past24").fadeIn("slow");
         }
+    }
+
+    google.charts.load('current', {'packages': ['corechart']});
+    function drawChart(id) {
+        let json24 ={{ past24 | tojson}};
+        var data = google.visualization.arrayToDataTable(json24[id]);
+        var options = {
+            title: 'Bicycle Usage',
+            legend: {position: 'none'},
+            chartArea: {'width': '75%', 'height': '80%'},
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
     }
 
 
@@ -297,8 +311,7 @@
 <script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"
         current=""></script>
 
-<script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"
-        data=station_list></script>
+<script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"></script>
 
 </body>
 </html>

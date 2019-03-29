@@ -382,7 +382,8 @@ function draw_marker(response_json) {
             position: {lat: response_json[i].position.lat, lng: response_json[i].position.lng},
             map: map,
             icon: image,
-            title: String(response_json[i].name)
+            title: String(response_json[i].name),
+            id: parseInt(response_json[i].number)
         });
 
         let banking;
@@ -397,7 +398,7 @@ function draw_marker(response_json) {
             '            <div id="wrap-box_now">\n' +
             '                <div class="row justify-content-center" style=";margin: 20px">\n' +
             '                    <div class=\'col-12 justify-content-center\' style=";text-align: center;">\n' +
-            '                        <h2 style="font-size: 1.5rem;">' + response_json[i].number + ' - ' + response_json[i].name + '</h2>\n' +
+            '                        <h2 style="font-size: 1.5rem;">' + response_json[i].name + '</h2>\n' +
             '                    </div>\n' +
             '                </div>\n' +
             '                <div class="row justify-content-center" style=";margin: 20px;">\n' +
@@ -482,7 +483,7 @@ function draw_marker(response_json) {
             '            </div>\n' +
             '            <div class="row justify-content-center" style=";margin: 20px">\n' +
             '                <div class="col-4 d-flex justify-content-center" style=";align-items: center;">\n' +
-            '                    <button type="button" class="btn btn-outline-info button_font_size" style=";padding: 1px 6px;" onclick="to_past24()">\n' +
+            '                    <button type="button" class="btn btn-outline-info button_font_size" style=";padding: 1px 6px;" onclick="to_past24('+marker.id+')">\n' +
             '                        Past 24\n' +
             '                    </button>\n' +
             '                </div>\n' +
@@ -504,7 +505,7 @@ function draw_marker(response_json) {
         let mker = {};
         mker.title = marker.title;
         mker.obj = marker;
-        mker.content = content;
+        // mker.content = content;
         mker.lat = response_json[i].position.lat;
         mker.lng = response_json[i].position.lng;
         mker.available_bike = response_json[i].available_bikes;
@@ -551,27 +552,6 @@ function show_info(marker, content) {
         active_marker_obj = infowindow;
         infowindow.open(marker.get("map"), marker);
     });
-}
-
-google.charts.load('current', {'packages': ['corechart']});
-
-function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-        ['Year', 'Sales', 'Expenses'],
-        ['2013', 1000, 400],
-        ['2014', 1170, 460],
-        ['2015', 660, 1120],
-        ['2016', 1030, 540]
-    ]);
-
-    var options = {
-        title: 'Company Performance',
-        legend: {position: 'none'},
-        chartArea: {'width': '75%', 'height': '80%'},
-    };
-
-    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
 }
 
 
