@@ -6,42 +6,32 @@ import requests
 import json
 import time
 
+stations_list = db.session.query(Stations.ID).all()
+yesterday_json = {}
+for i in stations_list:
+    yesterday_json[i[0]] = [['Hour', 'Usages']]
+yesterday = time.strftime("%Y-%m-%d", time.localtime(time.time() - 86400))
+yesterday_data = db.session.query(Bikes.ID, func.date_format(Bikes.day, '%H'),
+                                  func.sum(Bikes.available_bike_stands)). \
+    filter(func.date_format(Bikes.day, '%Y-%m-%d') == yesterday).group_by(func.date_format(Bikes.day, '%H'),
+                                                                          Bikes.ID).all()
+for i in yesterday_data:
+    yesterday_json[i[0]].append([int(i[1]), int(i[2])])
+
+file1 = open("app/static/Cache/past24.json", "w")
+json.dump(yesterday_json, file1)
+file1.close()
+
 
 @app.route('/')
 def index():
     respose = requests.get(app.config["SECRET_WEATHER_KEY"])
     weather_json = respose.json()
     respose.close()
-
-    stations_list = Stations.query.all()
-    stations_list_arr = []
-    for i in stations_list:
-        stations_list_arr.append(i.name)
-
-    # current = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-    current2 = time.strftime("%Y-%m-%d", time.localtime(time.time()))
-    current3 = time.strftime("%H", time.localtime(time.time()))
-    # past = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time() - 604800))
-    week = time.localtime(time.time())[6] + 1
-    week_data = db.session.query(func.count(Bikes.ID)). \
-        filter(Bikes.ID == 2, Bikes.day < current2, Bikes.week == 2, func.date_format(Bikes.day, '%H') == 23). \
-        all()
-    num_week = week_data[0][0] / 6
-    dynamic_data = db.session.query(func.date_format(Bikes.day, '%H'), func.sum(Bikes.available_bike_stands)). \
-        filter(Bikes.week == 1). \
-        group_by(func.date_format(Bikes.day, '%H')).all()
-
-    last_7_data = {'cols': [{'id': 'Time of day', 'label': 'Time of day', 'type': 'timeofday'},
-                            {'id': 'Usage', 'label': 'Usage', 'type': 'number'}], 'rows': []}
-
-    for i in dynamic_data:
-        c1 = {'v': [int(i[0]), 0, 0]}
-        # c2 = {'v': int(i[1]) / num_week}
-        c2 = {'v': int(i[1])}
-        last_7_data['rows'].append({'c': [c1, c2]})
+    file1 = open("app/static/Cache/past24.json", "r")
+    past24 = json.load(file1)
     return render_template('new_index.html', map_key=app.config["SECRET_MAP_KEY"], weather_json=weather_json,
-                           station_list=json.dumps(stations_list_arr), last_7_data=json.dumps(last_7_data),
-                           current3=current3)
+                           past24=past24)
 
 
 @app.route('/update_map')
@@ -53,12 +43,14 @@ def search():
         bike_current_json = respose.json()
         respose.close()
     else:
-        bike_current_json=[]
+        bike_current_json = []
         for h in range(24):
             bike_data = []
-            query_data = db.session.query(Stations.name, Stations.p_latitude, Stations.p_longitude, Bikes.available_bikes,
+            query_data = db.session.query(Stations.name, Stations.p_latitude, Stations.p_longitude,
+                                          Bikes.available_bikes,
                                           Bikes.available_bike_stands, Bikes.status). \
-                filter(func.date_format(Bikes.day, '%H') == h, Bikes.week == 2, Stations.ID == Bikes.ID).group_by(Stations.name).all()
+                filter(func.date_format(Bikes.day, '%H') == h, Bikes.week == 2, Stations.ID == Bikes.ID).group_by(
+                Stations.name).all()
 
             for i in query_data:
                 bike_data.append(
