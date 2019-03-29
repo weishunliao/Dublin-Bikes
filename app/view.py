@@ -12,7 +12,7 @@ for i in stations_list:
     yesterday_json[i[0]] = [['Hour', 'Usages']]
 yesterday = time.strftime("%Y-%m-%d", time.localtime(time.time() - 86400))
 yesterday_data = db.session.query(Bikes.ID, func.date_format(Bikes.day, '%H'),
-                                  func.sum(Bikes.available_bike_stands)). \
+                                  func.sum(Bikes.available_bikes)). \
     filter(func.date_format(Bikes.day, '%Y-%m-%d') == yesterday).group_by(func.date_format(Bikes.day, '%H'),
                                                                           Bikes.ID).all()
 for i in yesterday_data:
