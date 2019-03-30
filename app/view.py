@@ -60,3 +60,42 @@ def search():
             bike_current_json.append(bike_data)
         # print(bike_current_json)
     return jsonify(bike_current_json)
+
+
+import mysql.connector
+
+myRds = mysql.connector.connect(
+    host="dbbikes.coj48ycjuqgc.us-east-2.rds.amazonaws.com",
+    user="LFL_DBBIKES",
+    passwd="MYrds123",
+    database="dbbike"
+)
+
+myCursor = myRds.cursor()
+query = "SELECT table1.id ,table1.h, table2.`week`, table1.available_bike, table2.total_available_bike," \
+        "weather.temp, weather.weather,weather.visibility,weather.wind_speed " \
+        "FROM (SELECT id, DATE(`day`)as d,HOUR(`day`) as h, SUM(available_bikes)/6 as available_bike FROM dbbike.bikes " \
+        "WHERE last_update>=1551139651000 AND last_update <= 1553644391000 " \
+        "GROUP BY id,DAY(`day`),HOUR(`day`)) as table1, " \
+        "(SELECT DATE(`day`) as d,HOUR(`day`) as h, `week`,sum(available_bikes)/6 as total_available_bike FROM dbbike.bikes " \
+        "WHERE last_update>=1550707610000 and last_update<=1553212355000 " \
+        "GROUP BY DATE(`day`),HOUR(`day`)) as table2, " \
+        "(SELECT weather.temp, weather.weather,weather.visibility,weather.wind_speed,date(`day`) as d," \
+        "HOUR(`day`) as h FROM weather WHERE datetime>=1550707610 and datetime <= 1553212355) as weather " \
+        "WHERE table1.h=table2.h and table1.d=table2.d and table1.h=weather.h and table1.d=weather.d"
+myCursor.execute(query)
+myresult = myCursor.fetchall()
+training_data = [["available_bike", "station_id", "hour", "weekday", "total_bikes", "temp", "weather", "visibility",
+                 "wind_speed"]]
+for i in myresult:
+    sublist = []
+    sublist.append(float(i[3]))
+    sublist.append(i[0])
+    sublist.append(i[1])
+    sublist.append(int(i[2]))
+    sublist.append(float(i[4]))
+    sublist.append(float(i[5]))
+    sublist.append(i[6])
+    sublist.append(int(i[7]))
+    sublist.append(float(i[8]))
+    training_data.append(sublist)
