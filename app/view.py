@@ -5,6 +5,7 @@ from sqlalchemy import func
 import requests
 import json
 import time
+import mysql.connector
 
 stations_list = db.session.query(Stations.ID).all()
 yesterday_json = {}
@@ -62,12 +63,10 @@ def search():
     return jsonify(bike_current_json)
 
 
-import mysql.connector
-
 myRds = mysql.connector.connect(
     host="dbbikes.coj48ycjuqgc.us-east-2.rds.amazonaws.com",
-    user="LFL_DBBIKES",
-    passwd="MYrds123",
+    user=app.config["MYSQL_CONNECT_USER"],
+    passwd=app.config["MYSQL_CONNECT_PASSWORD"],
     database="dbbike"
 )
 
@@ -86,7 +85,8 @@ query = "SELECT table1.id ,table1.h, table2.`week`, table1.available_bike, table
 myCursor.execute(query)
 myresult = myCursor.fetchall()
 training_data = [["available_bike", "station_id", "hour", "weekday", "total_bikes", "temp", "weather", "visibility",
-                 "wind_speed"]]
+                  "wind_speed"]]
+
 for i in myresult:
     sublist = []
     sublist.append(float(i[3]))
@@ -99,3 +99,5 @@ for i in myresult:
     sublist.append(int(i[7]))
     sublist.append(float(i[8]))
     training_data.append(sublist)
+
+myCursor.close()
