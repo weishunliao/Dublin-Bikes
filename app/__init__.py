@@ -15,6 +15,10 @@ myRds = mysql.connector.connect(
     passwd=app.config["MYSQL_CONNECT_PASSWORD"],
     database="dbbike"
 )
-# view.readDB()
-# view.get_training_data(myRds)
-# view.build_model()
+
+
+# view.get_past24()
+# view.get_training_data_available_bike_stand(myRds)
+# view.get_training_data_available_bike(myRds)
+# view.build_model_available_bike()
+# view.build_model_available_bike_stand()

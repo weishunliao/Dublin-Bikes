@@ -262,12 +262,16 @@
         });
     }
 
-    function to_feature() {
+    function to_feature(id, past_available_bike,past_available_bike_stands) {
         if (document.getElementById("wrap-box_feature").style.display === "none") {
             document.getElementById("wrap-box_now").style.display = 'none';
             document.getElementById("wrap-box_past24").style.display = 'none';
             $("#wrap-box_feature").fadeIn("slow");
         }
+        $.get('/get_prediction?id=' + id + '&past_available_bike=' + past_available_bike+'&past_available_bike_stands='+past_available_bike_stands, function (response) {
+            document.getElementById('next2_bikes').innerHTML = "Available bikes:" + response[0];
+            document.getElementById('next2_bikes_stand').innerHTML = "Available bikes:" + response[1];
+        })
     }
 
     function to_now() {
@@ -288,6 +292,7 @@
     }
 
     google.charts.load('current', {'packages': ['corechart']});
+
     function drawChart(id) {
         let json24 ={{ past24 | tojson}};
         var data = google.visualization.arrayToDataTable(json24[id]);

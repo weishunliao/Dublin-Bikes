@@ -392,6 +392,9 @@ function draw_marker(response_json) {
         } else {
             banking = "No";
         }
+        let ud_time = new Date(response_json[i].last_update).toLocaleString();
+
+
         let content = '<div class="container" style="font-family: Rubik;padding: 0;">\n' +
             '    <div class="row" style="">\n' +
             '        <div class="col-12" style="padding: 0">\n' +
@@ -448,7 +451,7 @@ function draw_marker(response_json) {
             '                    <div class="col-10 d-flex"\n' +
             '                         style=";background-color: lightgrey;align-items: center;color: black">\n' +
             '                        <div style="text-align: center;font-size: 13pt;;">\n' +
-            '                            <span>Available bikes: 5</span>\n' +
+            '                            <span id="next2_bikes">Available bikes: </span>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>\n' +
@@ -459,18 +462,18 @@ function draw_marker(response_json) {
             '                    <div class="col-10 d-flex"\n' +
             '                         style=";background-color: lightgrey;align-items: center;">\n' +
             '                        <div class="" style="margin: 0;font-size: 13pt;;">\n' +
-            '                            <span>Free stands: 27</span>\n' +
+            '                            <span id="next2_bikes_stand">Free stands: </span>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>\n' +
             '                <div class="row justify-content-center" style=";;;margin: 20px">\n' +
             '                    <div class="col-2 d-flex" style="background-color: #efefef;align-items: center">\n' +
-            '                        <img src="static/img/visa.svg" width="100%" height="100%">\n' +
+            '                        <img src="static/img/clock.svg" width="100%" height="100%">\n' +
             '                    </div>\n' +
             '                    <div class="col-10 d-flex"\n' +
             '                         style=";background-color: lightgrey;align-items: center;">\n' +
             '                        <div style="text-align: center;font-size: 13pt;">\n' +
-            '                            <span>Credit cards accept: NO</span>\n' +
+            '                            <span>Last update: ' + ud_time + ' </span>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>\n' +
@@ -483,7 +486,7 @@ function draw_marker(response_json) {
             '            </div>\n' +
             '            <div class="row justify-content-center" style=";margin: 20px">\n' +
             '                <div class="col-4 d-flex justify-content-center" style=";align-items: center;">\n' +
-            '                    <button type="button" class="btn btn-outline-info button_font_size" style=";padding: 1px 6px;" onclick="to_past24('+marker.id+')">\n' +
+            '                    <button type="button" class="btn btn-outline-info button_font_size" style=";padding: 1px 6px;" onclick="to_past24(' + marker.id + ')">\n' +
             '                        Past 24\n' +
             '                    </button>\n' +
             '                </div>\n' +
@@ -493,7 +496,7 @@ function draw_marker(response_json) {
             '                    </button>\n' +
             '                </div>\n' +
             '                <div class="col-4 d-flex justify-content-center" style="align-items: center;">\n' +
-            '                    <button type="button" class="btn btn-outline-info button_font_size" style="padding: 1px 15px;" onclick="to_feature()">\n' +
+            '                    <button type="button" class="btn btn-outline-info button_font_size" style="padding: 1px 15px;" onclick="to_feature(' + response_json[i].number + "," + response_json[i].available_bikes + "," + response_json[i].available_bike_stands + ')">\n' +
             '                        Feature\n' +
             '                    </button>\n' +
             '                </div>\n' +
@@ -701,4 +704,8 @@ function displayRoute() {
             }
         }
     );
+}
+
+function predict() {
+
 }
