@@ -704,8 +704,5 @@ function displayRoute() {
             }
         }
     );
-}
-
-function predict() {
 
 }
