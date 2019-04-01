@@ -17,8 +17,8 @@ myRds = mysql.connector.connect(
 )
 
 
-# view.get_past24()
-# view.get_training_data_available_bike_stand(myRds)
-# view.get_training_data_available_bike(myRds)
-# view.build_model_available_bike()
-# view.build_model_available_bike_stand()
+view.get_past24()
+view.get_training_data_available_bike_stand(myRds)
+view.get_training_data_available_bike(myRds)
+view.build_model_available_bike()
+view.build_model_available_bike_stand()
