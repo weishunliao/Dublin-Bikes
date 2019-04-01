@@ -94,9 +94,9 @@
 <div id="map_page" style="display: none">
     <div class="container" style="position:relative;">
         <div class="row" style="padding: 30px 0 0 0;">
-            <div class="col-md-12" style="">
+            <div class="col-md-6 flex-row" style="">
                 <div class="input-group mb-3"
-                     style="width: 35%;margin:auto;height: 100%">
+                     style="height: 100%">
                     <div class="autocomplete col-9" style="padding: 0">
                         <input id="search_box" type="text" placeholder="Station name, Street name..."
                                class="form-control"
@@ -109,8 +109,18 @@
                     </div>
                 </div>
             </div>
-
-
+            <div class="col-md-6" style="">
+                <div class="input-group" style="height: 100%">
+                    <input type="text" aria-label="start" class="form-control" id="route_start" placeholder="From..." style="height: 80%">
+                    <input type="text" aria-label="destination" class="form-control" id="route_end"
+                           placeholder="Destination" style="height: 80%">
+                    <div class="input-group-prepend" style="padding: 0;">
+                        <button type="button" class="btn btn-success" onclick="calc_display_route()" style="border-radius: 0 5px 5px 0;height: 80%">
+                            Go
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="container" style="padding: 0;position: relative;">
@@ -160,7 +170,7 @@
                 </div>
             </div>
         </div>
-        <div style="position: absolute;z-index: 999;left: 15px;top:15px;">
+        <div style="position: absolute;z-index: 99;left: 15px;top:15px;">
             <div class="container">
                 <div class="row" style="">
                     <div class="col-2 col-md-2" style=";padding: 0;width: 10%">
@@ -178,16 +188,9 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div id="bike_map" style="height: 650px"></div>
+                <div id="bike_map" style="height: 600px"></div>
             </div>
         </div>
-    </div>
-</div>
-<div class="input-group">
-    <input type="text" aria-label="start" class="form-control" id="route_start" placeholder="From...">
-    <input type="text" aria-label="destination" class="form-control" id="route_end" placeholder="Destination">
-    <div class="input-group-prepend">
-        <button type="button" class="btn btn-success" onclick="calc_display_route()">Go</button>
     </div>
 </div>
 <script>
@@ -262,13 +265,13 @@
         });
     }
 
-    function to_feature(id, past_available_bike,past_available_bike_stands) {
+    function to_feature(id, past_available_bike, past_available_bike_stands) {
         if (document.getElementById("wrap-box_feature").style.display === "none") {
             document.getElementById("wrap-box_now").style.display = 'none';
             document.getElementById("wrap-box_past24").style.display = 'none';
             $("#wrap-box_feature").fadeIn("slow");
         }
-        $.get('/get_prediction?id=' + id + '&past_available_bike=' + past_available_bike+'&past_available_bike_stands='+past_available_bike_stands, function (response) {
+        $.get('/get_prediction?id=' + id + '&past_available_bike=' + past_available_bike + '&past_available_bike_stands=' + past_available_bike_stands, function (response) {
             document.getElementById('next2_bikes').innerHTML = "Available bikes:" + response[0];
             document.getElementById('next2_bikes_stand').innerHTML = "Available bikes:" + response[1];
         })
