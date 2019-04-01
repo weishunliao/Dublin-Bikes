@@ -95,9 +95,9 @@
     </div>
 
 </div>
-<div id="map_page" style="display: none">
+<div id="map_page" style="display: none;margin: 30px 0 -50px 0">
     <div class="container" style="position:relative;">
-        <div class="row" style="padding: 30px 0 0 0;">
+        <div class="row" style=";">
             <div class="col-md-6 flex-row" style="">
                 <div class="input-group mb-3"
                      style="height: 100%">
@@ -119,9 +119,9 @@
                            style="height: 80%">
                     <input type="text" aria-label="destination" class="form-control" id="route_end"
                            placeholder="Destination" style="height: 80%">
-                    <div class="input-group-prepend" style="padding: 0;">
-                        <button type="button" class="btn btn-success" onclick="calc_display_route()"
-                                style="border-radius: 0 5px 5px 0;height: 80%">
+                    <div id="route_btn" class="input-group-prepend" style="padding: 0;">
+                        <button id="route_btn" type="button" class="btn btn-success" onclick="calc_display_route()"
+                                style="border-radius: 0 5px 5px 0;height: 80%;background-color: #0A384A;border-color: #0A384A ">
                             Go
                         </button>
                     </div>
@@ -194,7 +194,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div id="bike_map" style="height: 580px"></div>
+                <div id="bike_map" style="height: 600px"></div>
             </div>
         </div>
     </div>

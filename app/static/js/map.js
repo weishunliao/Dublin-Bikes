@@ -704,5 +704,21 @@ function displayRoute() {
             }
         }
     );
+    document.getElementById("route_btn").innerHTML = "<button id=\"route_btn\" type=\"button\" " +
+        "class=\"btn btn-success\" onclick=\"clear_route()\"\n" +
+        "style=\"border-radius: 0 5px 5px 0;height: 80%;background-color:#D30A0A;border-color:#D30A0A\">\n" +
+        "Clear\n" +
+        "</button>";
+}
 
+function clear_route() {
+    clear_markers();
+    back_to_now();
+    document.getElementById("route_btn").innerHTML = "<button id=\"route_btn\" " +
+        "type=\"button\" class=\"btn btn-success\" onclick=\"calc_display_route()\"\n" +
+        "style=\"border-radius: 0 5px 5px 0;height: 80%\">\n" +
+        "Go\n" +
+        "</button>";
+    map.setZoom(13);
+    map.setCenter({lat: 53.3471, lng: -6.26059});
 }
