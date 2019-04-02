@@ -716,7 +716,7 @@ function clear_route() {
     back_to_now();
     document.getElementById("route_btn").innerHTML = "<button id=\"route_btn\" " +
         "type=\"button\" class=\"btn btn-success\" onclick=\"calc_display_route()\"\n" +
-        "style=\"border-radius: 0 5px 5px 0;height: 80%\">\n" +
+        "style=\"border-radius: 0 5px 5px 0;background-color: #0A384A;border-color: #0A384A;height: 80%\">\n" +
         "Go\n" +
         "</button>";
     map.setZoom(13);

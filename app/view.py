@@ -5,13 +5,10 @@ from sqlalchemy import func
 import requests
 import json
 import time
-import mysql.connector
 import pandas as pd
 import pickle
 import numpy as np
 import csv
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 
 
