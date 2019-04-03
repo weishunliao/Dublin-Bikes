@@ -139,38 +139,38 @@
                     </div>
                     <div class="col-8"
                          style="font-family: Poiret One;font-size: 20px;font-weight: bolder">
-                        <span style="margin-right: 10px">25&deg; CLOUDY</span>
-                        <i class="wi wi-thunderstorm" style="font-size: 35px;"></i>
+                        <span style="margin-right: 10px" id="current">25&deg; CLOUDY</span>
+                        <i class="wi wi-thunderstorm" style="font-size: 35px;" id="icon0"></i>
                     </div>
                 </div>
                 <div class="row"
                      style=";color: white;font-family: Poiret One;">
                     <div class="col-4" style="background: #5e5e5e;padding-bottom: 15px">
                         <div class="row">
-                            <p style="margin: auto"> 15:00</p>
+                            <p style="margin: auto" id="time1"> 15:00</p>
                         </div>
                         <div class="row align-items-end justify-content-center">
-                            <span style="font-size: 10pt;margin-right: 10px">25&deg;</span>
-                            <i class="wi wi-thunderstorm" style="font-size: 30px;"></i>
+                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;" id="temp1">25&deg;</span>
+                            <i class="wi wi-thunderstorm" style="font-size: 30px;" id="icon1"></i>
                         </div>
 
                     </div>
                     <div class="col-4" style="background: #5e5e5e">
                         <div class="row">
-                            <p style="margin: auto"> 15:00</p>
+                            <p style="margin: auto" id="time2"> 15:00</p>
                         </div>
                         <div class="row align-items-end justify-content-center">
-                            <span style="font-size: 10pt;margin-right: 10px">25&deg;</span>
-                            <i class="wi wi-thunderstorm" style="font-size: 30px;"></i>
+                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;" id="temp2">25&deg;</span>
+                            <i class="wi wi-thunderstorm" style="font-size: 30px;" id="icon2"></i>
                         </div>
                     </div>
                     <div class="col-4" style="background: #5e5e5e">
                         <div class="row">
-                            <p style="margin: auto"> 15:00</p>
+                            <p style="margin: auto" id="time3"> 15:00</p>
                         </div>
                         <div class="row align-items-end justify-content-center">
-                            <span style="font-size: 10pt;margin-right: 10px">25&deg;</span>
-                            <i class="wi wi-thunderstorm" style="font-size: 30px;"></i>
+                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;" id="temp3">25&deg;</span>
+                            <i class="wi wi-thunderstorm" style="font-size: 30px;" id="icon3"></i>
                         </div>
                     </div>
                 </div>
@@ -328,6 +328,60 @@
         var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
         chart.draw(data, options);
     }
+
+
+    weathers_object = {{ weather_for_json | tojson }};
+
+        let time1 = weathers_object.list[1].dt_txt.substring(11, 16);
+        let time2 = weathers_object.list[2].dt_txt.substring(11, 16);
+        let time3 = weathers_object.list[3].dt_txt.substring(11, 16);
+
+        let temp0 = parseInt(weathers_object.list[0].main.temp) -273.15;
+        let temp1 = parseInt(weathers_object.list[1].main.temp) -273.15;
+        let temp2 = parseInt(weathers_object.list[2].main.temp) -273.15;
+        let temp3 = parseInt(weathers_object.list[3].main.temp) -273.15;
+
+        let weather_des0 = weathers_object.list[0].weather[0].main;
+
+
+
+        let weather_id0 = weathers_object.list[0].weather[0].id;
+        let weather_id1 = weathers_object.list[1].weather[0].id;
+        let weather_id2 = weathers_object.list[2].weather[0].id;
+        let weather_id3 = weathers_object.list[3].weather[0].id;
+
+
+
+        document.getElementById("time1").innerHTML = time1;
+        document.getElementById("time2").innerHTML = time2;
+        document.getElementById("time3").innerHTML = time3;
+
+        document.getElementById("current").innerHTML = Math.round(temp0) + '&deg  '  + weather_des0;
+
+        document.getElementById("temp1").innerHTML =  Math.round(temp1) + '&deg  ';
+        document.getElementById("temp2").innerHTML =  Math.round(temp2) + '&deg  ';
+        document.getElementById("temp3").innerHTML =  Math.round(temp3) + '&deg  ';
+
+        let num0 = parseInt(weathers_object.list[0].dt_txt.substring(11, 13));
+        let num1 = parseInt(weathers_object.list[1].dt_txt.substring(11, 13));
+        let num2 = parseInt(weathers_object.list[2].dt_txt.substring(11, 13));
+        let num3 = parseInt(weathers_object.list[3].dt_txt.substring(11, 13));
+
+        let nums = [num0, num1, num2, num3];
+        let ids = [weather_id0, weather_id1, weather_id2, weather_id3];
+
+
+        for(var i = 0; i < 4 ; i++){
+            if(nums[i] >= 6 && nums[i] <= 18){
+                console.log(ids[i]);
+                document.getElementById("icon" + i).className = "wi wi-owm-day-" + ids[i];
+            }
+            else{
+                document.getElementById("icon" + i).className = "wi wi-owm-night-" + ids[i];
+
+            }
+        }
+
 
 
 </script>
