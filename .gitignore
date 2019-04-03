@@ -1,1 +1,8 @@
 instance/
+.idea/workspace.xml
+*/.DS_Store
+.idea/workspace.xml~549ed2e2eb4b7fd5e012168c39e1a42cc0448ee4
+app/static/cache/.DS_Store
+app/static/js/.DS_Store
+app/static/img/.DS_Store
+
