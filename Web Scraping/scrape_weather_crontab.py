@@ -1,3 +1,5 @@
+#!coding:utf-8
+
 import requests
 import time
 import json
@@ -20,24 +22,26 @@ conn = mysql.connector.connect(
     database="dbbike")
 cursor = conn.cursor()
 
-sql_query = '''INSERT INTO weather(`temp`,`weather`,`w_description`,`visibility`,`wind_speed`,`wind_degree`,`datetime`,`day`,`week`) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s)'''
+sql_query = '''INSERT INTO weather(`temp`,`weather`,`w_description`,`visibility`,`wind_speed`,`datetime`,`day`,`week`) VALUES (%s, %s, %s, %s, %s,%s,%s,%s)'''
 
 temp = response_json["main"]["temp"]
 weather = response_json["weather"][0]['main']
 description = response_json["weather"][0]["description"]
 visibility = response_json["visibility"]
 wind_speed = response_json["wind"]["speed"]
-wind_degree = response_json["wind"]["deg"]
+#wind_degree = response_json["wind"]["deg"]
 datetime = response_json["dt"]
 ltime = time.gmtime(datetime)
 day = time.strftime("%Y-%m-%d %H:%M:%S", ltime)
 week = ltime[6] + 1
 try:
     cursor.execute(sql_query, (temp, weather, description,
-                               visibility, wind_speed, wind_degree, datetime, day, week))
+                               visibility, wind_speed,  datetime, day, week))
     conn.commit()
 except Exception as err:
-    log = open('/home/ubuntu/scrape/log/weather' + getDataTime, 'w')
+    log = open('/home/ubuntu/scrape/log/weather/' + getDataTime, 'w')
     conn.rollback()
-    # print(err)
+    log.write(err)
     log.close()
+
+conn.close()

@@ -1,3 +1,4 @@
+import requests
 import time
 import json
 import mysql.connector
@@ -37,8 +38,8 @@ for i in response_json:
         conn.commit()
     except Exception as err:
         log = open('/home/ubuntu/scrape/log/db/' + getDataTime, 'w')
+        log.write(str(err))
         conn.rollback()
-        print(err)
         log.close()
 
 conn.close()

@@ -1,0 +1,8 @@
+SHELL=/bin/bash
+PATH=/home/ubuntu/.linuxbrew/bin:/home/ubuntu/.linuxbrew/sbin:/home/ubuntu/.linuxbrew/bin:/home/ubuntu/.linuxbrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:
+
+
+
+*/10 * * * * python3 /home/ubuntu/scrape/scrape_bikes_crontab.py
+
+*/60 * * * * python3 /home/ubuntu/scrape/scrape_weather_crontab.py
