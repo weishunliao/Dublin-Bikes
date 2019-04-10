@@ -10,6 +10,7 @@ import pickle
 import numpy as np
 import csv
 from sklearn.ensemble import RandomForestRegressor
+import smtplib
 
 response = requests.get(app.config["SECRET_WEATHER_KEY2"])
 weather_forecast = response.json()
@@ -129,6 +130,24 @@ def occupancy_map():
                  'position': j['position']})
         res.append(tempList)
     return jsonify(res)
+
+
+@app.route('/send_email')
+def send_email():
+    user_address = request.args.get('email')
+    msg = request.args.get('message')
+    name = request.args.get('name')
+    msg += "  From " + name
+    gmail_user = "dbbikes2019@gmail.com"
+    gmail_password = "@dbbikes2019dbbikes2019"
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.login(gmail_user, gmail_password)
+    server.sendmail(
+        user_address,
+        "jingyuan.feng@ucdconnect.ie",
+        msg)
+    server.quit()
+    return render_template("submit.html")
 
 
 def get_past24():

@@ -223,9 +223,9 @@
 </div>
 <div id="about_page" style="display: none;">
     <div class="container-fluid" style="background-color: lightgrey;margin-top: 10px">
-{#        <div class="row col-12 justify-content-center" style="margin-top: 10px;margin-bottom: 10px">#}
-{#            <h2 class="h2_font" style="font-weight: 200;font-size: 40pt">Our Team</h2>#}
-{#        </div>#}
+        {#        <div class="row col-12 justify-content-center" style="margin-top: 10px;margin-bottom: 10px">#}
+        {#            <h2 class="h2_font" style="font-weight: 200;font-size: 40pt">Our Team</h2>#}
+        {#        </div>#}
         <div class="row text-center justify-content-around" style="margin-top: 40px">
             <div class="col-2" style="padding: 0 10px 0 10px">
                 <img class="rounded-circle"
@@ -264,19 +264,14 @@
         </div>
         <div class="row justify-content-center" style="padding-bottom: 10px">
             <div class="media-container-column col-lg-8" data-form-type="formoid">
-                <div data-form-alert="" hidden="">
-                    Thanks for filling out the form!
-                </div>
-
-                <form class="mbr-form" action="https://dbbikes.tk/" method="get" data-form-title="Mobirise Form"><input
-                        type="hidden" data-form-email="true"
-                        value="AxfOGvwuump8yM5iqNpcFGuee84qDdGQwTFyCcty/niVpCifNg9AEz3cKQlaoEE0MWp/eXbnaFpNAFEy0pcQLM3NvxS2fY47xr3UGD+lL4eFstAciz6q0pL4O5jlRxGr">
+                <form id="mbr-form" class="mbr-form" action="/send_email" method="get"><input
+                        type="hidden" data-form-email="true">
                     <div class="row row-sm-offset">
                         <div class="col-md-6 multi-horizontal" data-for="name">
                             <div class="form-group">
                                 <label class="form-control-label mbr-fonts-style display-7 p_font"
                                        for="name-form1-2w">Name</label>
-                                <input type="text" class="form-control" name="name" data-form-field="Name" required=""
+                                <input type="text" class="form-control" name="name" data-form-field="Name"
                                        id="name-form1-2w">
                             </div>
                         </div>
@@ -299,7 +294,8 @@
                     </div>
                     <div class="row justify-content-center">
                     <span class="input-group-btn">
-                            <button href="" type="submit" class="btn btn-light btn-form display-4 h2_font" style="font-size: 16px">SEND FORM</button>
+                            <button id="submit-form" type="submit" class="btn btn-light btn-form display-4 h2_font"
+                                    style="font-size: 16px">SEND FORM</button>
                     </span>
                     </div>
                 </form>
@@ -342,6 +338,7 @@
         $("#about_page").fadeOut("slow");
 
     }
+
     function nav_about() {
         document.getElementById('nav_bar').style.backgroundColor = '#5e5e5e';
         $("#home_page").fadeOut("slow");
