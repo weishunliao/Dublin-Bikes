@@ -497,7 +497,7 @@ function draw_marker(response_json) {
             '                </div>\n' +
             '                <div class="col-4 d-flex justify-content-center" style="align-items: center;">\n' +
             '                    <button type="button" class="btn btn-outline-info button_font_size" style="padding: 1px 15px;" onclick="to_feature(' + response_json[i].number + "," + response_json[i].available_bikes + "," + response_json[i].available_bike_stands + ')">\n' +
-            '                        Feature\n' +
+            '                        Future\n' +
             '                    </button>\n' +
             '                </div>\n' +
             '            </div>\n' +
