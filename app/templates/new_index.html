@@ -30,13 +30,17 @@
                 height: auto;
             }
 
-            .bg-video {
-                position: fixed;
-                bottom: 0;
-                min-width: 100%;
-                min-height: 120%;
+            .nav-bg-color {
+                background-color: rgb(35, 35, 35) !important;
             }
         }
+
+        @media screen and (max-width: 860px) {
+            .bg-video {
+                opacity: 0 !important;
+            }
+        }
+
 
         .p_font {
             font-family: Dosis, sans-serif;
@@ -64,7 +68,7 @@
 </head>
 <body style="background-color: lightgrey;padding-bottom:0;padding-left: 0;padding-right: 0">
 <div class="container-fluid" id="top_page" style="z-index: 99999">
-    <nav class="navbar navbar-expand-md navbar-light" id="nav_bar"
+    <nav class="navbar navbar-expand-md navbar-light nav-bg-color" id="nav_bar"
          style="background-color: transparent;position: fixed;top: 0;left: 0;width: 100%;font-family: Poiret One;font-weight: bolder;z-index: 9999">
         <a class="navbar-brand" href="#">
             <img src="{{ url_for('static', filename='img/logo.svg') }}" width="50" height="50"
