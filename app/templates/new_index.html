@@ -185,7 +185,7 @@
                         </button>
                     </div>
                     <div class="col-10 col-md-10" style="">
-                        <input class="range-slider__range" type="range" value="12" min="0" max="23"
+                        <input class="range-slider__range" type="range" value="0" min="1" max="12"
                                step="1" style="background: white;" id="time_slider">
                         <span class="range-slider__value" id="SliderVal"></span>
                     </div>
@@ -203,7 +203,7 @@
     var d = new Date();
     var h = d.getUTCHours();
     var m = d.getMinutes();
-    $('#SliderVal').text(h + ":" + m);
+    $('#SliderVal').text(0);
 
     function to_map() {
         let map = document.getElementById('map_page');
@@ -234,17 +234,17 @@
     }
 
 
-    var historical_data;
-    $.get("/update_map?t=all", function (response) {
-        historical_data = response;
+    var slider_data;
+    $.get("/predict_occupancy", function (response) {
+        slider_data = response;
     });
 
     time_slider_obj = $("#time_slider");
     time_slider_obj.on('change', function () {
-        let val = $("#time_slider").val();
-        $("#SliderVal").text(val + ":00");
+        let val = time_slider_obj.val();
+        $("#SliderVal").text("+" + val+"hr");
         clear_markers();
-        draw_marker(historical_data[parseInt(val)])
+        draw_marker(slider_data[parseInt(val)])
     });
     var time_galobal = "current";
 
@@ -271,15 +271,9 @@
     }
 
     function back_to_now() {
-        $("#time_slider").val({{ current3 }});
         time_galobal = "current";
         $.get("/update_map?t=current", function (response) {
-            h = d.getUTCHours();
-            m = d.getMinutes();
-            if (h < 10) {
-                h = "0" + h;
-            }
-            $('#SliderVal').text(h + ":" + m);
+            $('#SliderVal').text(0);
             clear_markers();
             draw_marker(response);
         });

@@ -11,6 +11,20 @@ import numpy as np
 import csv
 from sklearn.ensemble import RandomForestRegressor
 
+response = requests.get(app.config["SECRET_WEATHER_KEY2"])
+weather_forecast = response.json()
+response.close()
+
+response = requests.get(
+    'https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=31523d933c2ed2b25fd82ba42e3f0277eadf6184')
+bike_current = response.json()
+response.close()
+
+pickleFile_bikes = open('app/static/cache/model_available_bike.pickle', 'rb')
+rg1 = pickle.load(pickleFile_bikes)
+pickleFile_stand = open('app/static/cache/model_available_bike_stands.pickle', 'rb')
+rg2 = pickle.load(pickleFile_stand)
+
 
 @app.route('/')
 def index():
@@ -20,6 +34,7 @@ def index():
     file1 = open("app/static/cache/past24.json", "r")
     past24 = json.load(file1)
     file1.close()
+<<<<<<< HEAD
 <<<<<<< HEAD
     respose = requests.get("https://api.openweathermap.org/data/2.5/forecast?q=Dublin&appid=3bd333c0a630c60ae3bd0d0b99f06941")
     weather_for_json = respose.json()
@@ -32,18 +47,22 @@ def index():
 
     return render_template('new_index.html', map_key=app.config["SECRET_MAP_KEY"], weather_json=weather_json,
                            past24=past24, weather_for_json=weather_for_json)
+=======
+    # response = requests.get(app.config["SECRET_WEATHER_KEY2"])
+    # weather_forecast = response.json()
+    # response.close()
+    return render_template('new_index.html', map_key=app.config["SECRET_MAP_KEY"], weather_current=weather_current,
+                           past24=past24, weather_forecast=weather_forecast)
+>>>>>>> 5b35ce4... change slider bar data from historical to prediction
 
 
 @app.route('/update_map')
 def search():
     t = request.args.get('t')
     if t == "current":
-        respose = requests.get(
-            'https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=31523d933c2ed2b25fd82ba42e3f0277eadf6184')
-        bike_current_json = respose.json()
-        respose.close()
+        bike_json = bike_current
     else:
-        bike_current_json = []
+        bike_json = []
         for h in range(24):
             bike_data = []
             query_data = db.session.query(Stations.name, Stations.p_latitude, Stations.p_longitude,
@@ -57,9 +76,8 @@ def search():
                     {'name': i[0], 'available_bike_stands': i[3], 'available_bikes': i[4], 'status': i[5],
                      'position': {'lat': i[1], 'lng': i[2]}})
 
-            bike_current_json.append(bike_data)
-        # print(bike_current_json)
-    return jsonify(bike_current_json)
+            bike_json.append(bike_data)
+    return jsonify(bike_json)
 
 
 @app.route('/get_prediction')
@@ -80,16 +98,36 @@ def get_prediction():
         weather = 0
     response.close()
     res = []
-    with open('app/static/cache/model_available_bike.pickle', 'rb') as pickleFile:
-        rg = pickle.load(pickleFile)
-        predictions = rg.predict(np.array([[stationID, hour, week, temp, weather, past_available_bike]]))
-        res.append(int(predictions))
+    predictions1 = rg1.predict(np.array([[stationID, hour, week, temp, weather, past_available_bike]]))
+    res.append(int(predictions1))
 
-    with open('app/static/cache/model_available_bike_stands.pickle', 'rb') as pickleFile:
-        rg = pickle.load(pickleFile)
-        # ['StationID', 'Hour', 'Weekday', 'Temp', 'Weather(Rain)', 'past_available_bike']
-        predictions = rg.predict(np.array([[stationID, hour, week, temp, weather, past_available_bike_stands]]))
-        res.append(int(predictions))
+    predictions2 = rg2.predict(np.array([[stationID, hour, week, temp, weather, past_available_bike_stands]]))
+    res.append(int(predictions2))
+    return jsonify(res)
+
+
+@app.route('/predict_occupancy')
+def occupancy_map():
+    res = []
+    for i in range(13):
+        tempList = []
+        for j in bike_current:
+            hour = int(time.strftime("%H", time.localtime()))
+            week = int(time.strftime("%w", time.localtime())) + 1
+            temp = weather_forecast['list'][i // 3]['main']['temp']
+            weather = weather_forecast['list'][i // 3]['weather'][0]['main']
+            if weather in ['Rain', 'Drizzle', 'Snow']:
+                weather = 1
+            else:
+                weather = 0
+            predictions1 = rg1.predict(np.array([[j['number'], hour + i, week, temp, weather, j['available_bikes']]]))
+            predictions2 = rg2.predict(np.array([[j['number'], hour, week, temp, weather, j['available_bike_stands']]]))
+
+            tempList.append(
+                {'name': j['name'], 'available_bike_stands': int(predictions2), 'available_bikes': int(predictions1),
+                 'status': 'OPEN',
+                 'position': j['position']})
+        res.append(tempList)
     return jsonify(res)
 
 
