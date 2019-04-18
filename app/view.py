@@ -20,9 +20,15 @@ def index():
     file1 = open("app/static/cache/past24.json", "r")
     past24 = json.load(file1)
     file1.close()
+<<<<<<< HEAD
     respose = requests.get("https://api.openweathermap.org/data/2.5/forecast?q=Dublin&appid=3bd333c0a630c60ae3bd0d0b99f06941")
     weather_for_json = respose.json()
     respose.close()
+=======
+    response = requests.get(app.config["SECRET_WEATHER_KEY2"])
+    weather_forecast = response.json()
+    response.close()
+>>>>>>> 07906d5... typo fix
 
     return render_template('new_index.html', map_key=app.config["SECRET_MAP_KEY"], weather_json=weather_json,
                            past24=past24, weather_for_json=weather_for_json)
