@@ -96,7 +96,8 @@
                      alt="Map"
                 >
                 <li class="nav-item">
-                    <a class="nav-link link text-white" onclick="nav_map()" style="cursor:grab;font-size: 1.4rem">Map</a>
+                    <a class="nav-link link text-white" onclick="nav_map()"
+                       style="cursor:grab;font-size: 1.4rem">Map</a>
                 </li>
                 <img src="{{ url_for('static', filename='img/work-team.svg') }}" width="40" height="40"
                      style="margin-top: 10px;margin-right: -30px"
@@ -180,7 +181,7 @@
                     </div>
                     <div class="col-8"
                          style="font-family: Poiret One;font-size: 20px;font-weight: bolder">
-                        <span style="margin-right: 10px" id="current">25&deg; CLOUDY</span>
+                        <span style="margin-right: 10px;font-size: 25px" id="temp_current">25&deg; CLOUDY</span>
                         <i class="wi wi-thunderstorm" style="font-size: 35px;" id="icon0"></i>
                     </div>
                 </div>
@@ -191,7 +192,8 @@
                             <p style="margin: auto" id="time1"> 15:00</p>
                         </div>
                         <div class="row align-items-end justify-content-center">
-                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;" id="temp1">25&deg;</span>
+                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;"
+                                  id="temp1">25&deg;</span>
                             <i class="wi wi-thunderstorm" style="font-size: 30px;" id="icon1"></i>
                         </div>
 
@@ -201,7 +203,8 @@
                             <p style="margin: auto" id="time2"> 15:00</p>
                         </div>
                         <div class="row align-items-end justify-content-center">
-                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;" id="temp2">25&deg;</span>
+                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;"
+                                  id="temp2">25&deg;</span>
                             <i class="wi wi-thunderstorm" style="font-size: 30px;" id="icon2"></i>
                         </div>
                     </div>
@@ -210,7 +213,8 @@
                             <p style="margin: auto" id="time3"> 15:00</p>
                         </div>
                         <div class="row align-items-end justify-content-center">
-                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;" id="temp3">25&deg;</span>
+                            <span style="font-size: 18px;margin-right: 10px; margin-top: 10px;"
+                                  id="temp3">25&deg;</span>
                             <i class="wi wi-thunderstorm" style="font-size: 30px;" id="icon3"></i>
                         </div>
                     </div>
@@ -420,7 +424,7 @@
         }
         $.get('/get_prediction?id=' + id + '&past_available_bike=' + past_available_bike + '&past_available_bike_stands=' + past_available_bike_stands, function (response) {
             document.getElementById('next2_bikes').innerHTML = "Available bikes:" + response[0];
-            document.getElementById('next2_bikes_stand').innerHTML = "Available bikes:" + response[1];
+            document.getElementById('next2_bikes_stand').innerHTML = "Free stands:" + response[1];
         })
     }
 
@@ -456,60 +460,8 @@
         chart.draw(data, options);
     }
 
-
-    weathers_object = {{ weather_for_json | tojson }};
-
-        let time1 = weathers_object.list[1].dt_txt.substring(11, 16);
-        let time2 = weathers_object.list[2].dt_txt.substring(11, 16);
-        let time3 = weathers_object.list[3].dt_txt.substring(11, 16);
-
-        let temp0 = parseInt(weathers_object.list[0].main.temp) -273.15;
-        let temp1 = parseInt(weathers_object.list[1].main.temp) -273.15;
-        let temp2 = parseInt(weathers_object.list[2].main.temp) -273.15;
-        let temp3 = parseInt(weathers_object.list[3].main.temp) -273.15;
-
-        let weather_des0 = weathers_object.list[0].weather[0].main;
-
-
-
-        let weather_id0 = weathers_object.list[0].weather[0].id;
-        let weather_id1 = weathers_object.list[1].weather[0].id;
-        let weather_id2 = weathers_object.list[2].weather[0].id;
-        let weather_id3 = weathers_object.list[3].weather[0].id;
-
-
-
-        document.getElementById("time1").innerHTML = time1;
-        document.getElementById("time2").innerHTML = time2;
-        document.getElementById("time3").innerHTML = time3;
-
-        document.getElementById("current").innerHTML = Math.round(temp0) + '&deg  '  + weather_des0;
-
-        document.getElementById("temp1").innerHTML =  Math.round(temp1) + '&deg  ';
-        document.getElementById("temp2").innerHTML =  Math.round(temp2) + '&deg  ';
-        document.getElementById("temp3").innerHTML =  Math.round(temp3) + '&deg  ';
-
-        let num0 = parseInt(weathers_object.list[0].dt_txt.substring(11, 13));
-        let num1 = parseInt(weathers_object.list[1].dt_txt.substring(11, 13));
-        let num2 = parseInt(weathers_object.list[2].dt_txt.substring(11, 13));
-        let num3 = parseInt(weathers_object.list[3].dt_txt.substring(11, 13));
-
-        let nums = [num0, num1, num2, num3];
-        let ids = [weather_id0, weather_id1, weather_id2, weather_id3];
-
-
-        for(var i = 0; i < 4 ; i++){
-            if(nums[i] >= 6 && nums[i] <= 18){
-                console.log(ids[i]);
-                document.getElementById("icon" + i).className = "wi wi-owm-day-" + ids[i];
-            }
-            else{
-                document.getElementById("icon" + i).className = "wi wi-owm-night-" + ids[i];
-
-            }
-        }
-
-
+    let weathers_object_forecast = {{ weather_forecast | tojson }};
+    let weathers_object_current ={{ weather_current | tojson }};
 
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -517,14 +469,8 @@
         src= {{ map_key }}>
     {#src=https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>#}
 </script>
-<<<<<<< HEAD
-<script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"
-        current=""></script>
-
-=======
 <script id="map_script" src="{{ url_for('static', filename='js/map.js') }}"></script>
 <script src="{{ url_for('static', filename='js/weather.js') }}"></script>
->>>>>>> 366e5bb... change map_page div to container-fluid
 <script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
