@@ -392,7 +392,7 @@ function draw_marker(response_json) {
         } else {
             banking = "No";
         }
-        let ud_time = new Date(response_json[i].last_update).toLocaleString();
+        let ud_time = new Date().toLocaleString();
 
 
         let content = '<div class="container" style="font-family: Rubik;padding: 0;">\n' +
