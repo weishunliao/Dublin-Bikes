@@ -1,0 +1,34 @@
+@import url(https://fonts.googleapis.com/css?family=Poiret+One);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css);
+
+.weather_box {
+    position: absolute;
+    z-index: 9;
+    right: 5px;
+    top: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+@media screen and (max-width: 600px) {
+    .weather_box {
+        display: none;
+    }
+
+    .h2_font {
+        font-family: Dosis, sans-serif;
+        font-weight: 500;
+        font-size: 14pt
+    }
+
+}
+
+
+
+
+
+
+
+
+
+

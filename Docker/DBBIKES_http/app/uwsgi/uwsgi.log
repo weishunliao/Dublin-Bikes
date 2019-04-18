@@ -1,0 +1,824 @@
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:13:31 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: b260e8680cc2
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x555f4e4d0270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x555f4e4d0270 pid: 15 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 15)
+spawned uWSGI worker 1 (pid: 16, cores: 1)
+spawned uWSGI worker 2 (pid: 18, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:13:32 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: b260e8680cc2
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x560af6788270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x560af6788270 pid: 22 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 22)
+spawned uWSGI worker 1 (pid: 23, cores: 1)
+spawned uWSGI worker 2 (pid: 25, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:13:34 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: b260e8680cc2
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x5555fb979270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x5555fb979270 pid: 29 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 29)
+spawned uWSGI worker 1 (pid: 30, cores: 1)
+spawned uWSGI worker 2 (pid: 32, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:13:37 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: b260e8680cc2
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x55fd299d1270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x55fd299d1270 pid: 36 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 36)
+spawned uWSGI worker 1 (pid: 37, cores: 1)
+spawned uWSGI worker 2 (pid: 38, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:17:17 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 964eb27938d5
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x564c6dc23270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x564c6dc23270 pid: 17 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 17)
+spawned uWSGI worker 1 (pid: 18, cores: 1)
+spawned uWSGI worker 2 (pid: 20, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:17:18 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 964eb27938d5
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x55c9ef716270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x55c9ef716270 pid: 24 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 24)
+spawned uWSGI worker 1 (pid: 25, cores: 1)
+spawned uWSGI worker 2 (pid: 27, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:17:20 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 964eb27938d5
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x5652a9ade270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x5652a9ade270 pid: 31 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 31)
+spawned uWSGI worker 1 (pid: 32, cores: 1)
+spawned uWSGI worker 2 (pid: 34, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:17:23 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 964eb27938d5
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x56255be06270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x56255be06270 pid: 38 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 38)
+spawned uWSGI worker 1 (pid: 39, cores: 1)
+spawned uWSGI worker 2 (pid: 41, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+[pid: 39|app: 0|req: 1/1] 192.168.80.1 () {42 vars in 738 bytes} [Wed Mar 20 20:17:35 2019] GET / => generated 12792 bytes in 2478 msecs (HTTP/1.1 200) 2 headers in 82 bytes (1 switches on core 0)
+[pid: 39|app: 0|req: 2/2] 192.168.80.1 () {42 vars in 658 bytes} [Wed Mar 20 20:17:38 2019] GET /update_map?t=current => generated 44087 bytes in 132 msecs (HTTP/1.1 200) 2 headers in 74 bytes (1 switches on core 0)
+Wed Mar 20 20:17:48 2019 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /update_map?t=all (192.168.80.1)
+OSError: write error
+[pid: 41|app: 0|req: 1/3] 192.168.80.1 () {44 vars in 689 bytes} [Wed Mar 20 20:17:38 2019] GET /update_map?t=all => generated 0 bytes in 9460 msecs (HTTP/1.1 200) 2 headers in 0 bytes (1 switches on core 0)
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:18:10 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 76c6be7145dd
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x55f9048fe270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x55f9048fe270 pid: 15 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 15)
+spawned uWSGI worker 1 (pid: 16, cores: 1)
+spawned uWSGI worker 2 (pid: 18, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:18:11 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 76c6be7145dd
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x558c39972270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x558c39972270 pid: 22 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 22)
+spawned uWSGI worker 1 (pid: 23, cores: 1)
+spawned uWSGI worker 2 (pid: 25, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:18:13 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 76c6be7145dd
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x55f23eba7270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x55f23eba7270 pid: 29 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 29)
+spawned uWSGI worker 1 (pid: 30, cores: 1)
+spawned uWSGI worker 2 (pid: 32, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+
+;uWSGI instance configuration
+[uwsgi]
+cheaper = 2
+processes = 16
+ini = /app/uwsgi.ini
+module = dublin_bikes
+callable = app
+chdir = /app
+master = true
+processes = 3
+thread = 2
+chmod-socket = 666
+logfile-chmod = 644
+procname-prefix-spaced = dbbikes
+py-autoreload = 1
+vacuum = true
+stats = /app/uwsgi/uwsgi.status
+pidfile = /app/uwsgi/uwsgi.pid
+daemonize = /app/uwsgi/uwsgi.log
+ini = /etc/uwsgi/uwsgi.ini
+socket = /tmp/uwsgi.sock
+chown-socket = nginx:nginx
+chmod-socket = 664
+hook-master-start = unix_signal:15 gracefully_kill_them_all
+need-app = true
+die-on-term = true
+show-config = true
+;end of configuration
+
+*** Starting uWSGI 2.0.17.1 (64bit) on [Wed Mar 20 20:18:16 2019] ***
+compiled with version: 6.3.0 20170516 on 02 February 2019 20:07:18
+os: Linux-4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018
+nodename: 76c6be7145dd
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /app
+writing pidfile to /app/uwsgi/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /app
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.2 (default, Jan 23 2019, 02:31:57)  [GCC 6.3.0 20170516]
+Python main interpreter initialized at 0x55aca1318270
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 291680 bytes (284 KB) for 3 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x55aca1318270 pid: 36 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 36)
+spawned uWSGI worker 1 (pid: 37, cores: 1)
+spawned uWSGI worker 2 (pid: 39, cores: 1)
+Python auto-reloader enabled
+*** Stats server enabled on /app/uwsgi/uwsgi.status fd: 13 ***
+running "unix_signal:15 gracefully_kill_them_all" (master-start)...
+[pid: 39|app: 0|req: 1/1] 192.168.96.1 () {44 vars in 769 bytes} [Wed Mar 20 20:18:27 2019] GET / => generated 12792 bytes in 2347 msecs (HTTP/1.1 200) 2 headers in 82 bytes (1 switches on core 0)
+[pid: 39|app: 0|req: 2/2] 192.168.96.1 () {42 vars in 658 bytes} [Wed Mar 20 20:18:30 2019] GET /update_map?t=current => generated 44087 bytes in 119 msecs (HTTP/1.1 200) 2 headers in 74 bytes (1 switches on core 0)
+[pid: 37|app: 0|req: 1/3] 192.168.96.1 () {44 vars in 689 bytes} [Wed Mar 20 20:18:29 2019] GET /update_map?t=all => generated 587533 bytes in 9573 msecs (HTTP/1.1 200) 2 headers in 75 bytes (3 switches on core 0)

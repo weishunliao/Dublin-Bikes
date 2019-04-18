@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanks</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+    <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</head>
+<body>
+<div class="card" style="width: 18rem;margin: 100px auto;border: 0">
+    <img src="{{ url_for('static', filename='img/thank-you.svg') }}" class="card-img-top" alt="...">
+    <div class="card-body" style="margin: 0 auto">
+        <h5 class="card-title">Successfully submitted.</h5>
+{#        <p class="card-text">Successfully submitted.</p>#}
+        <a href="/" class="btn btn-info" style="width: 100%">Go back to home page</a>
+    </div>
+</div>
+
+</body>
+</html>

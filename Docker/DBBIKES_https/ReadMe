@@ -1,0 +1,2 @@
+1. docker build -t dbbikes:https .
+2. docker run -d -v /etc/letsencrypt:/etc/letsencrypt -p 443:443 -p 80:80 --rm dbbikes:https

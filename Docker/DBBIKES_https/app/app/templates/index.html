@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+    <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type=text/javascript src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css"/>
+    <style>
+        .autocomplete {
+            /*the container must be positioned relative:*/
+            position: relative;
+            display: inline-block;
+        }
+
+        input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input[type=text] {
+            background-color: #f1f1f1;
+            width: 100%;
+        }
+
+        input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+        }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9;
+        }
+
+        .autocomplete-active {
+            /*when navigating through the items using the arrow keys:*/
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="input-group mb-3" style="width: 30%">
+    <div class="autocomplete" style="width:300px;">
+        <input id="search_box" type="text"  placeholder="Station name, Street name..."
+               class="form-control">
+    </div>
+    <button type="button" class="btn btn-dark" onclick=open_info_window()>Search</button>
+</div>
+<div id="hint"></div>
+<div id="bike_map" style="width:80%;height:600px;"></div>
+{#    <div id="weather_box">{{ weather_json["weather"][0]["main"] }}-{{ weather_json["main"]["temp"] }}</div>#}
+<br>
+<button type="button" class="btn btn-primary" onclick="back_to_now()">Now</button>
+<span id="ex6CurrentSliderValLabel">Time: <span id="SliderVal">Now</span></span><br>
+<div style="width: 85%;margin: 0 auto">
+    <input style="width: 100%" id="time_slider" type="Number" data-slider-min="0" data-slider-max="23"
+           data-slider-step="1"
+           data-slider-value={{ current3 }} data-slider-tooltip="always" data-slider-tooltip_position="top"/>
+</div>
+<div id="bike_chart"></div>
+
+</div>
+<script>
+    var time_galobal = "current";
+
+    function open_info_window() {
+        let marker = markers[0].obj;
+        let content = markers[0].content;
+        let station_name = document.getElementById('search_box').value;
+        for (let i = 0; i < markers.length; i++) {
+            if (markers[i].title == station_name) {
+                marker = markers[i].obj;
+                content = markers[i].content;
+                break;
+            }
+        }
+        var infowindow = new google.maps.InfoWindow({
+            content: content,
+            maxWidth: 500
+        });
+        if (active_marker_obj != null) {
+            active_marker_obj.close();
+        }
+        active_marker_obj = infowindow;
+        infowindow.open(marker.get("map"), marker);
+    }
+
+    {#
+    var station_list = [];
+    var station_list_json ={{ station_list | safe }};
+    for (let stationListElement of station_list_json) {
+        station_list.push(stationListElement);
+    }
+    #}
+
+    {# -----------draw chart----------- #}
+    var historical_data;
+    $.get("/update_map?t=all", function (response) {
+        historical_data = response;
+    });
+
+    time_slider_obj = $("#time_slider").bootstrapSlider();
+    time_slider_obj.on('change', function () {
+        let val = $("#time_slider").bootstrapSlider('getValue');
+        $("#SliderVal").text(val + ":00");
+        clear_markers();
+        draw_marker(historical_data[parseInt(val)])
+
+    });
+
+    function back_to_now() {
+        $("#time_slider").bootstrapSlider('setValue', {{ current3 }});
+        $("#SliderVal").text("Now");
+        time_galobal = "current";
+        $.get("/update_map?t=current", function (response) {
+            clear_markers();
+            draw_marker(response);
+        });
+    }
+
+    var last_7_data_json ={{ last_7_data | safe }};
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        {#var data = new google.visualization.DataTable(last_7_data_json);#}
+
+        var data = new google.visualization.DataTable(last_7_data_json);
+        var options = {
+            title: 'Bike Historical Usage Data',
+            legend: {position: 'top'}
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById('bike_chart'));
+        chart.draw(data, options);
+    }
+</script>
+<script async defer
+{#        src= {{ map_key }}>#}
+    src= https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>
+</script>
+<script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"
+        current=""></script>
+
+<script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"
+        data=station_list></script>
+
+</body>
+
