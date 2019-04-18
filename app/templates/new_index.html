@@ -96,7 +96,7 @@
 
 </div>
 <div id="map_page" style="display: none;margin: 30px 0 -50px 0">
-    <div class="container" style="position:relative;">
+    <div class="container-fluid" style="position:relative;">
         <div class="row" style=";">
             <div class="col-md-6 flex-row" style="">
                 <div class="input-group mb-3"
@@ -129,8 +129,8 @@
             </div>
         </div>
     </div>
-    <div class="container" style="padding: 0;position: relative;">
-        <div style="position:absolute;z-index: 999;right: 5px;top: 5px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+    <div class="container-fluid" style="padding: 0;position: relative;">
+        <div style="position:absolute;z-index: 9;right: 5px;top: 5px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
             <div class="container">
                 <div class="row align-items-center"
                      style="background: #FAFAFA;">
@@ -390,9 +390,14 @@
         src= {{ map_key }}>
     {#src=https://maps.googleapis.com/maps/api/js?client=gme-mcdonaldscorporation2&callback=myMap&language=en>#}
 </script>
+<<<<<<< HEAD
 <script id="map_script" src="{{ url_for('static', filename='js/map.js') }}" data="{{ bike_api_key }}"
         current=""></script>
 
+=======
+<script id="map_script" src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script src="{{ url_for('static', filename='js/weather.js') }}"></script>
+>>>>>>> 366e5bb... change map_page div to container-fluid
 <script id="auto_complete_script" src="{{ url_for('static', filename='js/auto-complete.js') }}"></script>
 
 </body>
